@@ -1,11 +1,11 @@
 #include <iostream>
 
-#include "conio.h"
+#include "include/hero.h"
+#include "include/interface.h"
 
 using namespace std;
 
 void drawMap (char map[][20], int heroY, int heroX, int mapSize) {
-
     const string defaultColor = "\033[0m";
     const string yellowColor = "\033[0;33m";
     const string greenColor = "\033[0;36m";
@@ -38,57 +38,6 @@ void drawMap (char map[][20], int heroY, int heroX, int mapSize) {
 
     cout << defaultColor;
 }
-
-void showInfo (int *heroX, int *heroY, int *HP, char *lastCell) {
-    cout << "\033[s";
-    cout << "\033[1;26H" << "HP: " << *HP;
-    cout << "\033[2;26H" << "X: " << *heroX << " Y: " << *heroY;
-    cout << "\033[3;26H" << "Cell under hero: " << *lastCell;
-    cout << "\033[u";
-}
-
-void showMessage (string message) {
-    cout << "\033[s";
-    cout << "\033[5;26H" << "\033[3m" << message << "\033[0m" ;
-    cout << "\033[u";
-}
-
-void moveHero(char map[][20], int *heroX, int *heroY, char *lastCell, int *HP) {
-    enum dirctions {up = 65, down, right, left};
-
-    int userDirection = getch();
-
-    int lastY = *heroY;
-    int lastX = *heroX;
-
-    map[*heroY][*heroX] = *lastCell;
-    switch (userDirection) {
-        case up:
-            (*heroY)--; break;
-        case down:
-            (*heroY)++; break;
-        case left:
-            (*heroX)--; break;
-        case right:
-            (*heroX)++; break;
-    }
-
-    if (map[*heroY][*heroX] == 'T') {
-        *HP -= 40; 
-        *lastCell = map[*heroY][*heroX];
-        map[*heroY][*heroX] = '@';
-
-        showMessage("You step on the trap, HP - 40");
-    } else if (map[*heroY][*heroX] != '#') {
-        *lastCell = map[*heroY][*heroX];
-        map[*heroY][*heroX] = '@';
-    } else {
-        *heroX = lastX;
-        *heroY = lastY;
-        map[lastY][lastX] = '@';
-    }
-}
-
 
 int main (void) {
     int heroX = 1;
