@@ -7,6 +7,8 @@ using namespace std;
 void moveHero(char map[][20], int *heroX, int *heroY, char *lastCell, int *HP) {
     enum dirctions {up = 65, down, right, left};
 
+    char trash1 = getch();
+    char trash2 = getch();
     int userDirection = getch();
 
     int lastY = *heroY;
