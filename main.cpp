@@ -5,39 +5,6 @@
 
 using namespace std;
 
-void drawMap (char map[][20], int heroY, int heroX, int mapSize) {
-    const string defaultColor = "\033[0m";
-    const string yellowColor = "\033[0;33m";
-    const string greenColor = "\033[0;36m";
-    const string redColor = "\033[0;31m";
-
-    int startCoordsY = ((heroY - 5) < 0) ? 0 : ((heroY + 5) >= mapSize) ? mapSize - 11 : heroY - 5;
-    int startCoordsX = ((heroX - 5) < 0) ? 0 : ((heroX + 5) >= mapSize) ? mapSize - 11 : heroX - 5;
-
-    for (int i = 0; i < 11; i++) {
-        for (int j = 0; j < 11; j++) {
-            char currentCell = map[startCoordsY + i][startCoordsX + j];
-
-            if (currentCell == '#') 
-                cout << yellowColor;
-            else if (currentCell == '@')
-                cout << greenColor;
-            else if (currentCell == 'T') {
-                cout << redColor << ". ";
-            }
-            else 
-                cout << defaultColor;
-
-            if (currentCell != 'T')
-                cout << currentCell << " ";
-
-        }
-        
-        cout << defaultColor << " |" << '\n';
-    }
-
-    cout << defaultColor;
-}
 
 int main (void) {
     int heroX = 2;
@@ -68,12 +35,17 @@ int main (void) {
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
     };
 
+    string log[10] = {
+        "Привет. Это консоль, для вывода лога твоих",
+        "действий.",
+        "Ты можешь перемещаться с помощью стрелок.",
+        "E - исследовать клетку",
+    };
 
     while (1 == 1) {
         system("clear");
-        drawMap(map, heroY, heroX, 20);
-        showInfo(&heroX, &heroY, &HP, &lastCell);
-        moveHero(map, &heroX, &heroY, &lastCell, &HP);
+        reload(map, &heroY, &heroX, 20, &HP, &lastCell, log);
+        heroAction(map, &heroX, &heroY, &lastCell, &HP, log);
     }
 
     return 0;

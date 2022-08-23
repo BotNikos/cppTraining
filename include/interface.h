@@ -1,3 +1,3 @@
 #include <iostream>
-void showInfo (int *heroX, int *heroY, int *HP, char *lastCell);
-void showMessage (std::string message);
+void logMessage (std::string message, std::string log[]);
+void reload (char map[][20], int *heroY, int *heroX, int mapSize, int *HP, char *lastCell, std::string log[]);

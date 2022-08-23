@@ -1,37 +1,49 @@
+#include <chrono>
+#include <thread>
 #include <iostream>
 #include "../include/conio.h"
 #include "../include/interface.h"
 
 using namespace std;
 
-void moveHero(char map[][20], int *heroX, int *heroY, char *lastCell, int *HP) {
+void moveHero(char map[][20], int *heroX, int *heroY, char *lastCell, int *HP, string log[]) {
     enum dirctions {up = 65, down, right, left};
 
-    char trash1 = getch();
-    char trash2 = getch();
+    char trash = getch();
     int userDirection = getch();
 
     int lastY = *heroY;
     int lastX = *heroX;
 
     map[*heroY][*heroX] = *lastCell;
+    string message;
     switch (userDirection) {
         case up:
-            (*heroY)--; break;
+            (*heroY)--;
+            message = "Вы пошли вверх";
+            break;
         case down:
-            (*heroY)++; break;
+            (*heroY)++; 
+            message = "Вы пошли вниз";
+            break;
         case left:
-            (*heroX)--; break;
+            (*heroX)--; 
+            message = "Вы пошли налево";
+            break;
         case right:
-            (*heroX)++; break;
+            (*heroX)++; 
+            message = "Вы пошли направо";
+            break;
     }
+
+    logMessage(message, log);
 
     if (map[*heroY][*heroX] == 'T') {
         *HP -= 40; 
         *lastCell = map[*heroY][*heroX];
         map[*heroY][*heroX] = '@';
 
-        showMessage("You step on the trap, HP - 40");
+        logMessage("Вы наступили на ловушку, HP - 40", log);
     } else if (map[*heroY][*heroX] != '#') {
         *lastCell = map[*heroY][*heroX];
         map[*heroY][*heroX] = '@';
@@ -41,3 +53,11 @@ void moveHero(char map[][20], int *heroX, int *heroY, char *lastCell, int *HP) {
         map[lastY][lastX] = '@';
     }
 }
+
+void heroAction (char map[][20], int *heroX, int *heroY, char *lastCell, int *HP, string log[]) {
+    char userAction = getch();
+
+    if ((int)userAction == 27)
+        moveHero(map, heroX, heroY, lastCell, HP, log);
+}
+
