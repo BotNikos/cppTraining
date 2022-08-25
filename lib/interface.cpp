@@ -27,13 +27,14 @@ void drawMap (char map[][20], int heroY, int heroX, int mapSize) {
                 cout << yellowColor;
             else if (currentCell == '@')
                 cout << greenColor;
-            else if (currentCell == 'T') {
+            else if (currentCell == 'T') 
                 cout << redColor << ". ";
-            }
+            else if (currentCell == 'I')
+                cout << yellowColor << ". ";
             else 
                 cout << defaultColor;
 
-            if (currentCell != 'T')
+            if (currentCell != 'T' && currentCell != 'I')
                 cout << currentCell << " ";
 
         }
@@ -45,7 +46,7 @@ void drawMap (char map[][20], int heroY, int heroX, int mapSize) {
 }
 
 void showLog (string log[]) {
-    cout << "\033[11;0H";
+    cout << "\033[12;0H";
     cout << "-------------------------------------------" << '\n';
     for (int i = 0; i < 10; i++) {
         cout << "\033[2K" << log[i] << '\n';

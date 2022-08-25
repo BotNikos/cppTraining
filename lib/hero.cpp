@@ -54,7 +54,7 @@ void moveHero(char map[][20], int *heroX, int *heroY, char *lastCell, int *HP, s
     }
 }
 
-void examine (char map[][20], int *heroX, int *heroY, string log[]) {
+void examine (char map[][20], int *heroX, int *heroY, string log[], string itemList[][2], int itemMap[][3], int itemMapSize) {
     enum dirctions {up = 65, down, right, left};
 
     logMessage("", log);
@@ -93,15 +93,28 @@ void examine (char map[][20], int *heroX, int *heroY, string log[]) {
             logMessage("поразглядывав ее пару минут, вы поняли, что", log); 
             logMessage("тратите время впустую", log); 
             break;
+        case  'I':
+            string examineItem[2];
+            for (int i = 0; i < itemMapSize; i++) {
+                if (examineY == itemMap[i][1] && examineX == itemMap[i][2]) {
+                    examineItem[0] = itemList[itemMap[i][0]][0];
+                    examineItem[1] = itemList[itemMap[i][0]][1];
+                }
+            }
+
+            logMessage("Перед вами лежит предмет: " + examineItem[0], log);
+            logMessage("он " + examineItem[1], log);
+
+            break;
     }
 }
 
-void heroAction (char map[][20], int *heroX, int *heroY, char *lastCell, int *HP, string log[]) {
+void heroAction (char map[][20], int *heroX, int *heroY, char *lastCell, int *HP, string log[], string itemList[][2], int itemMap[][3], int itemMapSize) {
     char userAction = getch();
 
     if ((int)userAction == 27)
         moveHero(map, heroX, heroY, lastCell, HP, log);
     else if (userAction == 'e') 
-        examine(map, heroX, heroY, log);
+        examine(map, heroX, heroY, log, itemList, itemMap, itemMapSize);
 }
 
