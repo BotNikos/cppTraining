@@ -45,9 +45,10 @@ void drawMap (char map[][20], int heroY, int heroX, int mapSize) {
 }
 
 void showLog (string log[]) {
+    cout << "\033[11;0H";
     cout << "-------------------------------------------" << '\n';
     for (int i = 0; i < 10; i++) {
-        cout << log[i] << '\n';
+        cout << "\033[2K" << log[i] << '\n';
     }
     cout << "-------------------------------------------" << '\n';
 }
@@ -58,6 +59,8 @@ void logMessage (string message, string log[]) {
     }
 
     log[9] = message;
+
+    showLog(log);
 }
 
 void reload (char map[][20], int *heroY, int *heroX, int mapSize, int *HP, char *lastCell, string log[]) {

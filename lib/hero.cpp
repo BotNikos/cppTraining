@@ -54,10 +54,54 @@ void moveHero(char map[][20], int *heroX, int *heroY, char *lastCell, int *HP, s
     }
 }
 
+void examine (char map[][20], int *heroX, int *heroY, string log[]) {
+    enum dirctions {up = 65, down, right, left};
+
+    logMessage("", log);
+    logMessage("Выберете направление клетки, которую вы", log);
+    logMessage("хотите изучить", log);
+
+    getch();
+    getch();
+    int direction = getch();
+
+    int examineX = *heroX;
+    int examineY = *heroY;
+    switch (direction) {
+        case up:
+            examineY--; break;
+        case down:
+            examineY++; break;
+        case left:
+            examineX--; break;
+        case right:
+            examineX++; break;
+    }
+
+    logMessage("", log);
+    switch (map[examineY][examineX]) {
+        case '.':
+            logMessage("Вы смотрите на холодный пол, и не можете", log); 
+            logMessage("найти ничего примечательного", log); 
+            break;
+        case 'T':
+            logMessage("Перед вами ловушка, которая может сделать", log); 
+            logMessage("довольно больно", log); 
+            break;
+        case '#':
+            logMessage("Ваше внимание привлекла стена, и", log); 
+            logMessage("поразглядывав ее пару минут, вы поняли, что", log); 
+            logMessage("тратите время впустую", log); 
+            break;
+    }
+}
+
 void heroAction (char map[][20], int *heroX, int *heroY, char *lastCell, int *HP, string log[]) {
     char userAction = getch();
 
     if ((int)userAction == 27)
         moveHero(map, heroX, heroY, lastCell, HP, log);
+    else if (userAction == 'e') 
+        examine(map, heroX, heroY, log);
 }
 
