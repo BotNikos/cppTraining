@@ -1,12 +1,14 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
+
 #include "../include/conio.h"
 #include "../include/interface.h"
+#include "../include/globals.h"
 
 using namespace std;
 
-void moveHero(char map[][20], int *heroX, int *heroY, char *lastCell, int *HP, string log[]) {
+void moveHero(char map[][20], int *heroX, int *heroY, char *lastCell, int *HP, string log[], int inventory[], int *clearInventorySlot) {
     enum dirctions {up = 65, down, right, left};
 
     char trash = getch();
@@ -44,6 +46,19 @@ void moveHero(char map[][20], int *heroX, int *heroY, char *lastCell, int *HP, s
         map[*heroY][*heroX] = '@';
 
         logMessage("Вы наступили на ловушку, HP - 40", log);
+    }  else if (map[*heroY][*heroX] == 'I') {
+
+        for (int i = 0; i < sizeof(itemMap); i++) {
+            if (itemMap[i][1] == *heroY && itemMap[i][2] == *heroX) {
+                inventory[*clearInventorySlot] = itemMap[i][0];
+                *clearInventorySlot++;
+                logMessage("Вы подобрали: " + itemList[itemMap[i][0]][0], log);
+            }
+        }
+
+        *lastCell = '.';
+        map[*heroY][*heroX] = '@';
+
     } else if (map[*heroY][*heroX] != '#') {
         *lastCell = map[*heroY][*heroX];
         map[*heroY][*heroX] = '@';
@@ -54,7 +69,7 @@ void moveHero(char map[][20], int *heroX, int *heroY, char *lastCell, int *HP, s
     }
 }
 
-void examine (char map[][20], int *heroX, int *heroY, string log[], string itemList[][2], int itemMap[][3], int itemMapSize) {
+void examine (char map[][20], int *heroX, int *heroY, string log[]) {
     enum dirctions {up = 65, down, right, left};
 
     logMessage("", log);
@@ -95,7 +110,7 @@ void examine (char map[][20], int *heroX, int *heroY, string log[], string itemL
             break;
         case  'I':
             string examineItem[2];
-            for (int i = 0; i < itemMapSize; i++) {
+            for (int i = 0; i < sizeof(itemMap); i++) {
                 if (examineY == itemMap[i][1] && examineX == itemMap[i][2]) {
                     examineItem[0] = itemList[itemMap[i][0]][0];
                     examineItem[1] = itemList[itemMap[i][0]][1];
@@ -109,12 +124,12 @@ void examine (char map[][20], int *heroX, int *heroY, string log[], string itemL
     }
 }
 
-void heroAction (char map[][20], int *heroX, int *heroY, char *lastCell, int *HP, string log[], string itemList[][2], int itemMap[][3], int itemMapSize) {
+void heroAction (char map[][20], int *heroX, int *heroY, char *lastCell, int *HP, string log[], int inventory[], int *clearInventorySlot) {
     char userAction = getch();
 
     if ((int)userAction == 27)
-        moveHero(map, heroX, heroY, lastCell, HP, log);
+        moveHero(map, heroX, heroY, lastCell, HP, log, inventory, clearInventorySlot);
     else if (userAction == 'e') 
-        examine(map, heroX, heroY, log, itemList, itemMap, itemMapSize);
+        examine(map, heroX, heroY, log);
 }
 
