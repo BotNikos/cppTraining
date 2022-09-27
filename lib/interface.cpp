@@ -46,18 +46,20 @@ void drawMap (char map[][20], int heroY, int heroX, int mapSize) {
     cout << defaultColor;
 }
 
-void showInventory (int inventory[], int clearInventorySlot) {
+void showInventory (int inventory[], int clearInventorySlot, string itemList[][2]) {
     for (int i = 0; i < 24; i++)
         cout << "\033[" << i << ";44H" << "|\n";
 
 
-    //cout << "\033[0;46H" << "Инвентарь:";
-    //for (int i = 1; i <= (clearInventorySlot - 1); i++) {
-        //int itemId = inventory[i - 1];
-        //string itemName = itemList[itemId][0];
-        //string itemDesc = itemList[itemId][1];
-        //cout << "\033[" << i + 1 << ";46H" << itemName;
-    //}
+    cout << "\033[s";
+    cout << "\033[0;46H" << "Инвентарь:";
+    for (int i = 1; i <= clearInventorySlot; i++) {
+        int itemId = inventory[i - 1];
+        string itemName = itemList[itemId][0];
+        string itemDesc = itemList[itemId][1];
+        cout << "\033[" << i + 1 << ";46H" << itemName;
+    }
+    cout << "\033[u";
 }
 
 void showLog (string log[]) {
@@ -79,9 +81,14 @@ void logMessage (string message, string log[]) {
     showLog(log);
 }
 
-void reload (char map[][20], int *heroY, int *heroX, int mapSize, int *HP, char *lastCell, string log[], int inventory[], int clearInventorySlot) {
+void reload (char map[][20], int *heroY,
+             int *heroX, int mapSize, int *HP,
+             char *lastCell, string log[],
+             int inventory[], int clearInventorySlot,
+             string itemList[][2]) {
+
     drawMap(map, *heroY, *heroX, mapSize);
     showInfo(heroX, heroY, HP, lastCell);
     showLog(log);
-    showInventory(inventory, clearInventorySlot);
+    showInventory(inventory, clearInventorySlot, itemList);
 }
