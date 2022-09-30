@@ -128,22 +128,40 @@ void examine (char map[][20], int *heroX, int *heroY,
     }
 }
 
+void moveItemCursor (int *inventoryCursorPosition) {
+    enum dirctions {up = 65, down};
+
+    getch();
+    int direction = getch();
+
+    if (direction == up && *inventoryCursorPosition > 2)
+	(*inventoryCursorPosition)--;
+    else if (direction == down && *inventoryCursorPosition < 20)
+	(*inventoryCursorPosition)++;
+}
+
 void heroAction (char map[][20], int *heroX, int *heroY,
                  char *lastCell, int *HP, string log[],
                  int inventory[], int *clearInventorySlot,
                  string itemList[][2], int itemMap[][3],
-                 int itemMapSize) {
+                 int itemMapSize, int *inventoryMode,
+		 int *inventoryCursorPosition) {
 
     char userAction = getch();
 
-    if ((int)userAction == 27)
+    if ((int)userAction == 27 && *inventoryMode == 0)
         moveHero(
             map, heroX, heroY,
             lastCell, HP, log,
             inventory, clearInventorySlot,
             itemList, itemMap, itemMapSize
         );
+    else if ((int)userAction == 27 && *inventoryMode == 1)
+	moveItemCursor(inventoryCursorPosition);
     else if (userAction == 'e') 
         examine(map, heroX, heroY, log, itemList, itemMap, itemMapSize);
+    else if (userAction == 'i')
+	*inventoryMode = 1;
+
 }
 

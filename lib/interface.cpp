@@ -14,7 +14,8 @@ void showInfo (int *heroX, int *heroY, int *HP, char *lastCell) {
 void drawMap (char map[][20], int heroY, int heroX, int mapSize) {
     const string defaultColor = "\033[0m";
     const string yellowColor = "\033[0;33m";
-    const string greenColor = "\033[0;36m";
+    const string cyanColor = "\033[0;36m";
+    const string greenColor = "\033[0;32m";
     const string redColor = "\033[0;31m";
 
     int startCoordsY = ((heroY - 5) < 0) ? 0 : ((heroY + 5) >= mapSize) ? mapSize - 11 : heroY - 5;
@@ -27,11 +28,11 @@ void drawMap (char map[][20], int heroY, int heroX, int mapSize) {
             if (currentCell == '#') 
                 cout << yellowColor;
             else if (currentCell == '@')
-                cout << greenColor;
+                cout << cyanColor;
             else if (currentCell == 'T') 
                 cout << redColor << ". ";
             else if (currentCell == 'I')
-                cout << yellowColor << ". ";
+                cout << greenColor << ". ";
             else 
                 cout << defaultColor;
 
@@ -46,19 +47,24 @@ void drawMap (char map[][20], int heroY, int heroX, int mapSize) {
     cout << defaultColor;
 }
 
-void showInventory (int inventory[], int clearInventorySlot, string itemList[][2]) {
+void showInventory (int inventory[], int clearInventorySlot, string itemList[][2],
+		    int inventoryMode, int inventoryCursorPosition) {
     for (int i = 0; i < 24; i++)
         cout << "\033[" << i << ";44H" << "|\n";
 
 
     cout << "\033[s";
-    cout << "\033[0;46H" << "Инвентарь:";
+    cout << "\033[0;47H" << "Инвентарь:";
     for (int i = 1; i <= clearInventorySlot; i++) {
         int itemId = inventory[i - 1];
         string itemName = itemList[itemId][0];
         string itemDesc = itemList[itemId][1];
-        cout << "\033[" << i + 1 << ";46H" << itemName;
+        cout << "\033[" << i + 1 << ";47H" << itemName;
     }
+
+    if (inventoryMode)
+	cout << "\033[" << inventoryCursorPosition << ";45H" << ">";
+
     cout << "\033[u";
 }
 
@@ -85,10 +91,14 @@ void reload (char map[][20], int *heroY,
              int *heroX, int mapSize, int *HP,
              char *lastCell, string log[],
              int inventory[], int clearInventorySlot,
-             string itemList[][2]) {
+             string itemList[][2], int inventoryMode,
+	     int inventoryCursorPosition) {
 
     drawMap(map, *heroY, *heroX, mapSize);
     showInfo(heroX, heroY, HP, lastCell);
     showLog(log);
-    showInventory(inventory, clearInventorySlot, itemList);
+    showInventory(
+	inventory, clearInventorySlot, itemList,
+	inventoryMode, inventoryCursorPosition
+    );
 }

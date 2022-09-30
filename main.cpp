@@ -25,6 +25,9 @@ int main () {
     int inventory[20];
     int clearInventorySlot = 0;
 
+    int inventoryMode = 0;
+    int inventoryCursorPosition = 2;
+
     char map[20][20] = {
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
         {'#', '.', '@', 'I', '#', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '#'},
@@ -61,14 +64,16 @@ int main () {
             map, &heroY, &heroX,
             20, &HP, &lastCell,
             log, inventory,
-            clearInventorySlot, itemList
+            clearInventorySlot, itemList,
+	    inventoryMode, inventoryCursorPosition
         );
 
         heroAction(
             map, &heroX, &heroY,
             &lastCell, &HP, log,
             inventory, &clearInventorySlot,
-            itemList, itemMap, sizeof(itemMap)
+            itemList, itemMap, sizeof(itemMap),
+	    &inventoryMode, &inventoryCursorPosition
         );
     }
 
