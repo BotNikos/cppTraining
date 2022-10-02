@@ -12,17 +12,18 @@ int main () {
     char lastCell = '.';
 
     string itemList[][2] = {
+        {"", "Пустой элемент"},
         {"Зелье", "восстанавливает 20 ОЗ"},
         {"Яд", "отнимает 20 ОЗ"}
     };
 
     // data structure {item number from item arr, item y, item x}
     int itemMap[][3] = {
-        {0, 1, 3},
-        {1, 6, 2}
+        {1, 1, 3},
+        {2, 6, 2}
     };
 
-    int inventory[20];
+    int inventory[20] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     int clearInventorySlot = 0;
 
     int inventoryMode = 0;

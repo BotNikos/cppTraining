@@ -140,6 +140,24 @@ void moveItemCursor (int *inventoryCursorPosition) {
 	(*inventoryCursorPosition)++;
 }
 
+void useItem (int inventory[], string itemList[][2],
+              int *inventoryCursorPosition, int *HP,
+              string log[], int *inventoryMode) {
+    string currentItem = itemList[inventory[*inventoryCursorPosition - 2]][0];
+
+    if (currentItem == "Зелье")
+        *HP += 20;
+    else if (currentItem == "Яд")
+        *HP -= 20;
+    else if (currentItem == "")
+        logMessage("Вы выбрали пустую ячейку", log);
+    else
+        logMessage("Данный предмет не может быть использован", log);
+ 
+    inventory[*inventoryCursorPosition - 2] = 0;
+    *inventoryMode = 0;
+}
+
 void heroAction (char map[][20], int *heroX, int *heroY,
                  char *lastCell, int *HP, string log[],
                  int inventory[], int *clearInventorySlot,
@@ -156,12 +174,14 @@ void heroAction (char map[][20], int *heroX, int *heroY,
             inventory, clearInventorySlot,
             itemList, itemMap, itemMapSize
         );
-    else if ((int)userAction == 27 && *inventoryMode == 1)
-	moveItemCursor(inventoryCursorPosition);
     else if (userAction == 'e') 
         examine(map, heroX, heroY, log, itemList, itemMap, itemMapSize);
     else if (userAction == 'i')
-	*inventoryMode = 1;
+	*inventoryMode = !(*inventoryMode);
+    else if ((int)userAction == 27 && *inventoryMode == 1)
+	moveItemCursor(inventoryCursorPosition);
+    else if (userAction == '\n' && *inventoryMode == 1)
+        useItem(inventory, itemList, inventoryCursorPosition, HP, log, inventoryMode);
 
 }
 
