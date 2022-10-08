@@ -5,6 +5,15 @@
 
 using namespace std;
 
+struct enemy {
+    string name;
+    char symb;
+    int HP;
+    int damage;
+    int x;
+    int y;
+};
+
 int main () {
     int heroX = 2;
     int heroY = 1;
@@ -25,7 +34,6 @@ int main () {
 
     int inventory[20] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     int clearInventorySlot = 0;
-
     int inventoryMode = 0;
     int inventoryCursorPosition = 2;
 
@@ -52,6 +60,9 @@ int main () {
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
     };
 
+    struct enemy enemies[] = {"Rat", 'R', 20, 3, 3, 2, "Goblin", 'G', 40, 10, 2, 2};
+    // struct enemy rat = {"Rat", 'R', 20, 3, 3, 2};
+
     string log[10] = {
         "Привет. Это консоль, для вывода лога твоих",
         "действий.",
@@ -66,7 +77,8 @@ int main () {
             20, &HP, &lastCell,
             log, inventory,
             clearInventorySlot, itemList,
-	    inventoryMode, inventoryCursorPosition
+	    inventoryMode, inventoryCursorPosition,
+            enemies
         );
 
         heroAction(

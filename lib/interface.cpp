@@ -2,6 +2,15 @@
 
 using namespace std;
 
+struct enemy {
+    string name;
+    char symb;
+    int HP;
+    int damage;
+    int x;
+    int y;
+};
+
 void showInfo (int *heroX, int *heroY, int *HP, char *lastCell) {
     cout << "\033[s";
     cout << "\033[1;26H" << "User info:";
@@ -11,7 +20,7 @@ void showInfo (int *heroX, int *heroY, int *HP, char *lastCell) {
     cout << "\033[u";
 }
 
-void drawMap (char map[][20], int heroY, int heroX, int mapSize) {
+void drawMap (char map[][20], int heroY, int heroX, int mapSize, struct enemy enemies[]) {
     const string defaultColor = "\033[0m";
     const string yellowColor = "\033[0;33m";
     const string cyanColor = "\033[0;36m";
@@ -20,6 +29,10 @@ void drawMap (char map[][20], int heroY, int heroX, int mapSize) {
 
     int startCoordsY = ((heroY - 5) < 0) ? 0 : ((heroY + 5) >= mapSize) ? mapSize - 11 : heroY - 5;
     int startCoordsX = ((heroX - 5) < 0) ? 0 : ((heroX + 5) >= mapSize) ? mapSize - 11 : heroX - 5;
+
+    for (int i = 0; i < 2; i++) {
+        map[enemies[i].y][enemies[i].x] = 'E';
+    }
 
     for (int i = 0; i < 11; i++) {
         for (int j = 0; j < 11; j++) {
@@ -33,12 +46,16 @@ void drawMap (char map[][20], int heroY, int heroX, int mapSize) {
                 cout << redColor << ". ";
             else if (currentCell == 'I')
                 cout << greenColor << ". ";
-            else 
+            else if (currentCell == 'E') {
+                for (int e = 0; e < 2; e++) {
+                    if (enemies[e].x == (startCoordsX + j) && enemies[e].y == (startCoordsY + i))
+                        cout << redColor << enemies[e].symb << " ";
+                }
+            } else 
                 cout << defaultColor;
 
-            if (currentCell != 'T' && currentCell != 'I')
+            if (currentCell != 'T' && currentCell != 'I' && currentCell != 'E')
                 cout << currentCell << " ";
-
         }
         
         cout << defaultColor << " |" << '\n';
@@ -87,14 +104,16 @@ void logMessage (string message, string log[]) {
     showLog(log);
 }
 
+
 void reload (char map[][20], int *heroY,
              int *heroX, int mapSize, int *HP,
              char *lastCell, string log[],
              int inventory[], int clearInventorySlot,
              string itemList[][2], int inventoryMode,
-	     int inventoryCursorPosition) {
+	     int inventoryCursorPosition,
+             struct enemy enemies[]) {
 
-    drawMap(map, *heroY, *heroX, mapSize);
+    drawMap(map, *heroY, *heroX, mapSize, enemies);
     showInfo(heroX, heroY, HP, lastCell);
     showLog(log);
     showInventory(

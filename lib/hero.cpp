@@ -182,6 +182,5 @@ void heroAction (char map[][20], int *heroX, int *heroY,
 	moveItemCursor(inventoryCursorPosition);
     else if (userAction == '\n' && *inventoryMode == 1)
         useItem(inventory, itemList, inventoryCursorPosition, HP, log, inventoryMode);
-
 }
 
