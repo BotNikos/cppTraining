@@ -29,6 +29,9 @@ int main () {
     int inventoryMode = 0;
     int inventoryCursorPosition = 2;
 
+    int battleMode = 0;
+    struct enemy battler;
+
     char map[20][20] = {
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
         {'#', '.', '@', 'I', '#', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '#'},
@@ -70,7 +73,7 @@ int main () {
             log, inventory,
             clearInventorySlot, itemList,
 	    inventoryMode, inventoryCursorPosition,
-            enemies, enemiesSize
+            enemies, enemiesSize, battleMode, &battler
         );
 
         heroAction(
@@ -78,7 +81,8 @@ int main () {
             &lastCell, &HP, log,
             inventory, &clearInventorySlot,
             itemList, itemMap, sizeof(itemMap),
-	    &inventoryMode, &inventoryCursorPosition
+	    &inventoryMode, &inventoryCursorPosition,
+            enemies, enemiesSize, &battleMode, &battler
         );
 
         enemyAction(map, heroX, heroY, enemies, enemiesSize);

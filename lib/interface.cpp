@@ -104,7 +104,8 @@ void reload (char map[][20], int *heroY,
              int inventory[], int clearInventorySlot,
              string itemList[][2], int inventoryMode,
 	     int inventoryCursorPosition,
-             struct enemy enemies[], int enemiesSize) {
+             struct enemy enemies[], int enemiesSize,
+             int battleMode, struct enemy *battler) {
 
     drawMap(map, *heroY, *heroX, mapSize, enemies, enemiesSize);
     showInfo(heroX, heroY, HP, lastCell);
@@ -113,4 +114,7 @@ void reload (char map[][20], int *heroY,
 	inventory, clearInventorySlot, itemList,
 	inventoryMode, inventoryCursorPosition
     );
+
+    if (battleMode)
+        logMessage("Вы деретесь против " + battler->name, log);
 }

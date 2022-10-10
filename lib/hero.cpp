@@ -4,6 +4,7 @@
 
 #include "../include/conio.h"
 #include "../include/interface.h"
+#include "../include/enemy.h"
 
 using namespace std;
 
@@ -158,12 +159,25 @@ void useItem (int inventory[], string itemList[][2],
     *inventoryMode = 0;
 }
 
+void enemyCheck (struct enemy enemies[], int enemySize,
+                 int heroX, int heroY, int *battleMode,
+                 struct enemy *battler) {
+    
+    for (int i = 0; i < enemySize; i++) {
+        if (enemies[i].x == heroX && enemies[i].y == heroY) {
+            *battleMode = 1;
+            *battler = enemies[i];
+        }
+    }
+}
+
 void heroAction (char map[][20], int *heroX, int *heroY,
                  char *lastCell, int *HP, string log[],
                  int inventory[], int *clearInventorySlot,
                  string itemList[][2], int itemMap[][3],
                  int itemMapSize, int *inventoryMode,
-		 int *inventoryCursorPosition) {
+		 int *inventoryCursorPosition, struct enemy enemies[],
+                 int enemiesSize, int *battleMode, struct enemy *battler) {
 
     char userAction = getch();
 
@@ -182,5 +196,7 @@ void heroAction (char map[][20], int *heroX, int *heroY,
 	moveItemCursor(inventoryCursorPosition);
     else if (userAction == '\n' && *inventoryMode == 1)
         useItem(inventory, itemList, inventoryCursorPosition, HP, log, inventoryMode);
+
+    enemyCheck(enemies, enemiesSize, *heroX, *heroY, battleMode, battler);
 }
 

@@ -11,7 +11,7 @@ void move (char map[][20], int heroX, int heroY,
         int lastY = enemies[i].y;
 
         map[enemies[i].y][enemies[i].x] = enemies[i].lastCell;
-        enemies[i].y++;
+        //enemies[i].y++;
         enemies[i].lastCell = map[enemies[i].y][enemies[i].x];
 
         if (enemies[i].lastCell == '#') {
