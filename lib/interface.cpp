@@ -1,15 +1,7 @@
 #include <iostream>
+#include "../include/enemy.h"
 
 using namespace std;
-
-struct enemy {
-    string name;
-    char symb;
-    int HP;
-    int damage;
-    int x;
-    int y;
-};
 
 void showInfo (int *heroX, int *heroY, int *HP, char *lastCell) {
     cout << "\033[s";
@@ -20,7 +12,9 @@ void showInfo (int *heroX, int *heroY, int *HP, char *lastCell) {
     cout << "\033[u";
 }
 
-void drawMap (char map[][20], int heroY, int heroX, int mapSize, struct enemy enemies[]) {
+void drawMap (char map[][20], int heroY, int heroX,
+              int mapSize, struct enemy enemies[], int enemiesSize) {
+
     const string defaultColor = "\033[0m";
     const string yellowColor = "\033[0;33m";
     const string cyanColor = "\033[0;36m";
@@ -30,7 +24,7 @@ void drawMap (char map[][20], int heroY, int heroX, int mapSize, struct enemy en
     int startCoordsY = ((heroY - 5) < 0) ? 0 : ((heroY + 5) >= mapSize) ? mapSize - 11 : heroY - 5;
     int startCoordsX = ((heroX - 5) < 0) ? 0 : ((heroX + 5) >= mapSize) ? mapSize - 11 : heroX - 5;
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < enemiesSize; i++) {
         map[enemies[i].y][enemies[i].x] = 'E';
     }
 
@@ -104,16 +98,15 @@ void logMessage (string message, string log[]) {
     showLog(log);
 }
 
-
 void reload (char map[][20], int *heroY,
              int *heroX, int mapSize, int *HP,
              char *lastCell, string log[],
              int inventory[], int clearInventorySlot,
              string itemList[][2], int inventoryMode,
 	     int inventoryCursorPosition,
-             struct enemy enemies[]) {
+             struct enemy enemies[], int enemiesSize) {
 
-    drawMap(map, *heroY, *heroX, mapSize, enemies);
+    drawMap(map, *heroY, *heroX, mapSize, enemies, enemiesSize);
     showInfo(heroX, heroY, HP, lastCell);
     showLog(log);
     showInventory(

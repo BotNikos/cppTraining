@@ -5,4 +5,4 @@ void reload (char map[][20], int *heroY, int *heroX,
              std::string log[], int inventory[],
              int clearInventorySlot, std::string itemList[][2],
 	     int inventoryMode, int inventoryCursorPosition,
-             struct enemy enemies[]);
+             struct enemy enemies[], int enemiesSize);

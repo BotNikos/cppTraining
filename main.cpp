@@ -1,18 +1,10 @@
 #include <iostream>
 
 #include "include/hero.h"
+#include "include/enemy.h"
 #include "include/interface.h"
 
 using namespace std;
-
-struct enemy {
-    string name;
-    char symb;
-    int HP;
-    int damage;
-    int x;
-    int y;
-};
 
 int main () {
     int heroX = 2;
@@ -60,8 +52,8 @@ int main () {
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
     };
 
-    struct enemy enemies[] = {"Rat", 'R', 20, 3, 3, 2, "Goblin", 'G', 40, 10, 2, 2};
-    // struct enemy rat = {"Rat", 'R', 20, 3, 3, 2};
+    struct enemy enemies[] = {"Rat", 'R', 20, 3, '.', 3, 2, "Goblin", 'G', 40, 10, '.', 2, 2};
+    int enemiesSize = sizeof(enemies)/sizeof(enemy);
 
     string log[10] = {
         "Привет. Это консоль, для вывода лога твоих",
@@ -78,7 +70,7 @@ int main () {
             log, inventory,
             clearInventorySlot, itemList,
 	    inventoryMode, inventoryCursorPosition,
-            enemies
+            enemies, enemiesSize
         );
 
         heroAction(
@@ -88,6 +80,8 @@ int main () {
             itemList, itemMap, sizeof(itemMap),
 	    &inventoryMode, &inventoryCursorPosition
         );
+
+        enemyAction(map, heroX, heroY, enemies, enemiesSize);
     }
 
     return 0;
