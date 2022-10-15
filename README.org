@@ -1,0 +1,85 @@
+#+Ttile: README
+#+Author: Nikita Bolotov
+
+* Description
+This is a hobby game for better understanding how C/C++ language works.
+All game runs into terminat and using only ASCII symbols.
+
+* Dependencies 
+To compile the game you need:
+1. Make
+2. Cmake
+
+* Installation
+** Cloning
+    First you need to do is clone this repository to your computer.
+    
+    #+begin_src bash
+        git clone https://github.com/BotNikos/cppTraining.git
+    #+end_src
+** Compiling
+    After cloning you need create build directory go in it, and compile game with cmake.
+    #+begin_src bash
+      mkdir build
+      cd build
+      cmake ..
+    #+end_src
+    
+    After compiling code via Cmake, you need to make the project with make.
+    
+    #+begin_src bash
+      make
+    #+end_src
+
+    If you did all right, you see file named game in build directory
+    To start the game type:
+    #+begin_src bash
+      ./game
+    #+end_src
+
+
+* TODO List:
+** Player [2/3]
+- [X] Map showing
+- [X] Moving
+- [ ] Equipment
+  
+** Usable items [5/6]
+- [X] Items shows on map
+- [X] User can pick-up items
+- [X] User can use items
+- [X] Items shows in inventory
+- [X] User can move on inventory
+- [ ] Chests
+  
+*** Item list
+
+| Name   | Description   |
+|--------+---------------|
+| Potion | Restore 20 HP |
+| Poison | Decrese 20 HP |
+
+** Enemeies
+*** Map [2/2]
+- [X] Enemy show on map
+- [X] Enemy can move on the map
+*** Enemey behaviour [0/2]
+- [ ] Enemy follow for player, considering walls
+- [ ] Enemy attack player
+  
+** Levels [2/4]
+*** Levels todo
+- [X] Traps
+- [X] Player can walktrough level
+- [ ] Level editor 
+- [ ] Hidden rooms
+*** Lelevs working descripion
+    Levels store in include/levels.h file.
+    To load level in game, you need put level variable data from levels.h into map variable in main.cpp
+
+** Interface [4/4]
+- [X] Map
+- [X] Player data
+- [X] Event log
+- [X] Inventory
+  
