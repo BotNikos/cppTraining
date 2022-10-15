@@ -31,7 +31,7 @@ To compile the game you need:
       make
     #+end_src
 
-    If you did all right, you see file named game in build directory
+    If you did all right, you see file named "game" in build directory
     To start the game type:
     #+begin_src bash
       ./game
