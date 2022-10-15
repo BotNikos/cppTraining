@@ -40,6 +40,8 @@ void drawMap (char map[][20], int heroY, int heroX,
                 cout << redColor << ". ";
             else if (currentCell == 'I')
                 cout << greenColor << ". ";
+            else if (currentCell == '^')
+                cout << greenColor;
             else if (currentCell == 'E') {
                 for (int e = 0; e < 2; e++) {
                     if (enemies[e].x == (startCoordsX + j) && enemies[e].y == (startCoordsY + i))
@@ -94,9 +96,11 @@ void logMessage (string message, string log[]) {
     }
 
     log[9] = message;
-
-    showLog(log);
 }
+
+//void showBattleScreen (int *HP, struct enemy *battler) {
+    
+//}
 
 void reload (char map[][20], int *heroY,
              int *heroX, int mapSize, int *HP,
@@ -107,14 +111,17 @@ void reload (char map[][20], int *heroY,
              struct enemy enemies[], int enemiesSize,
              int battleMode, struct enemy *battler) {
 
-    drawMap(map, *heroY, *heroX, mapSize, enemies, enemiesSize);
-    showInfo(heroX, heroY, HP, lastCell);
-    showLog(log);
-    showInventory(
-	inventory, clearInventorySlot, itemList,
-	inventoryMode, inventoryCursorPosition
-    );
-
-    if (battleMode)
+    if (battleMode) {
         logMessage("Вы деретесь против " + battler->name, log);
+    } else {
+        drawMap(map, *heroY, *heroX, mapSize, enemies, enemiesSize);
+        showInfo(heroX, heroY, HP, lastCell);
+        showInventory(
+            inventory, clearInventorySlot, itemList,
+            inventoryMode, inventoryCursorPosition
+        );
+    }
+
+    showLog(log);
+
 }

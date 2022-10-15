@@ -21,8 +21,16 @@ void move (char map[][20], int heroX, int heroY,
     }
 }
 
-void enemyAction (char map[][20], int heroX, int heroY,
-                  struct enemy enemies[], int enemiesSize) {
+void clearEnemies(struct enemy enemies[], int *enemiesSize) {
+    for (int i = 0; i < *enemiesSize; i++) {
+        enemies[i] = {};
+    }
 
-    move (map, heroX, heroY, enemies, enemiesSize);
+    *enemiesSize = 0;
+}
+
+void enemyAction (char map[][20], int heroX, int heroY,
+                  struct enemy enemies[], int *enemiesSize) {
+
+    move (map, heroX, heroY, enemies, *enemiesSize);
 }

@@ -9,4 +9,5 @@ struct enemy {
 };
 
 void enemyAction (char map[][20], int heroX, int heroY,
-                  struct enemy enemies[], int enemiesSize);
+                  struct enemy enemies[], int *enemiesSize);
+void clearEnemies (struct enemy enemies[], int *enemiesSize);

@@ -11,7 +11,8 @@ using namespace std;
 void moveHero(char map[][20], int *heroX, int *heroY,
               char *lastCell, int *HP, string log[],
               int inventory[], int *clearInventorySlot,
-              string itemList[][2], int itemMap[][3], int itemMapSize) {
+              string itemList[][2], int itemMap[][3],
+              int itemMapSize, int *currentLevel, int *newLevel) {
 
     enum dirctions {up = 65, down, right, left};
 
@@ -63,6 +64,9 @@ void moveHero(char map[][20], int *heroX, int *heroY,
         *lastCell = '.';
         map[*heroY][*heroX] = '@';
 
+    } else if (map[*heroY][*heroX] == '^') {
+        *newLevel = 1;
+        *currentLevel++;
     } else if (map[*heroY][*heroX] != '#') {
         *lastCell = map[*heroY][*heroX];
         map[*heroY][*heroX] = '@';
@@ -177,7 +181,8 @@ void heroAction (char map[][20], int *heroX, int *heroY,
                  string itemList[][2], int itemMap[][3],
                  int itemMapSize, int *inventoryMode,
 		 int *inventoryCursorPosition, struct enemy enemies[],
-                 int enemiesSize, int *battleMode, struct enemy *battler) {
+                 int enemiesSize, int *battleMode, struct enemy *battler,
+                 int *currentLevel, int *newLevel) {
 
     char userAction = getch();
 
@@ -186,7 +191,8 @@ void heroAction (char map[][20], int *heroX, int *heroY,
             map, heroX, heroY,
             lastCell, HP, log,
             inventory, clearInventorySlot,
-            itemList, itemMap, itemMapSize
+            itemList, itemMap, itemMapSize,
+            currentLevel, newLevel
         );
     else if (userAction == 'e') 
         examine(map, heroX, heroY, log, itemList, itemMap, itemMapSize);
