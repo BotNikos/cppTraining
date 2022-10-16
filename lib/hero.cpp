@@ -5,12 +5,11 @@
 #include "../include/conio.h"
 #include "../include/interface.h"
 #include "../include/enemy.h"
+#include "../include/hero.h"
 
 using namespace std;
 
-void moveHero(char map[][20], int *heroX, int *heroY,
-              char *lastCell, int *HP, string log[],
-              int inventory[], int *clearInventorySlot,
+void moveHero(char map[][20], struct hero *hero, string log[],
               string itemList[][2], int itemMap[][3],
               int itemMapSize, int *currentLevel, int *newLevel) {
 
@@ -19,66 +18,70 @@ void moveHero(char map[][20], int *heroX, int *heroY,
     char trash = getch();
     int userDirection = getch();
 
-    int lastY = *heroY;
-    int lastX = *heroX;
+    int lastY = hero -> y;
+    int lastX = hero -> x;
 
-    map[*heroY][*heroX] = *lastCell;
+    map[hero -> y][hero -> x] = hero -> lastCell;
     string message;
     switch (userDirection) {
         case up:
-            (*heroY)--;
+            hero -> y--;
             message = "Вы пошли вверх";
             break;
         case down:
-            (*heroY)++; 
+            hero -> y++;
             message = "Вы пошли вниз";
             break;
         case left:
-            (*heroX)--; 
+            hero -> x--;
             message = "Вы пошли налево";
             break;
         case right:
-            (*heroX)++; 
+            hero -> x++;
             message = "Вы пошли направо";
             break;
     }
 
     logMessage(message, log);
 
-    if (map[*heroY][*heroX] == 'T') {
-        *HP -= 40; 
-        *lastCell = map[*heroY][*heroX];
-        map[*heroY][*heroX] = '@';
+    char currentCell = map[hero -> y][hero -> x];
+
+    if (currentCell == 'T') {
+        hero -> HP -= 40;
+        hero -> lastCell = map[hero -> y][hero -> x];
+        map[hero -> y][hero -> x] = '@';
 
         logMessage("Вы наступили на ловушку, HP - 40", log);
-    }  else if (map[*heroY][*heroX] == 'I') {
+    }  else if (currentCell == 'I') {
 
         for (int i = 0; i < itemMapSize; i++) {
-            if (itemMap[i][1] == *heroY && itemMap[i][2] == *heroX) {
-                inventory[*clearInventorySlot] = itemMap[i][0];
-                (*clearInventorySlot)++;
+            if (itemMap[i][1] == hero -> y && itemMap[i][2] == hero -> x) {
+                hero -> inventory[hero -> clearInventorySlot] = itemMap[i][0];
+                hero -> clearInventorySlot++;
                 logMessage("Вы подобрали: " + itemList[itemMap[i][0]][0], log);
             }
         }
 
-        *lastCell = '.';
-        map[*heroY][*heroX] = '@';
+        hero -> lastCell = '.';
+        map[hero -> y][hero -> x] = '@';
 
-    } else if (map[*heroY][*heroX] == '^') {
+    } else if (currentCell == '^') {
         *newLevel = 1;
         *currentLevel++;
-    } else if (map[*heroY][*heroX] != '#') {
-        *lastCell = map[*heroY][*heroX];
-        map[*heroY][*heroX] = '@';
+    } else if (currentCell != '#') {
+        hero -> lastCell = map[hero -> y][hero -> x];
+        map[hero -> y][hero -> x] = '@';
     } else {
-        *heroX = lastX;
-        *heroY = lastY;
+        hero -> x = lastX;
+        hero -> y = lastY;
         map[lastY][lastX] = '@';
     }
 }
 
-void examine (char map[][20], int *heroX, int *heroY,
-              string log[], string itemList[][2], int itemMap[][3], int itemMapSize) {
+void examine (char map[][20], struct hero *hero, 
+              string log[], string itemList[][2],
+              int itemMap[][3], int itemMapSize) {
+
     enum dirctions {up = 65, down, right, left};
 
     logMessage("", log);
@@ -89,8 +92,8 @@ void examine (char map[][20], int *heroX, int *heroY,
     getch();
     int direction = getch();
 
-    int examineX = *heroX;
-    int examineY = *heroY;
+    int examineX = hero -> x;
+    int examineY = hero -> y;
     switch (direction) {
         case up:
             examineY--; break;
@@ -145,39 +148,37 @@ void moveItemCursor (int *inventoryCursorPosition) {
 	(*inventoryCursorPosition)++;
 }
 
-void useItem (int inventory[], string itemList[][2],
-              int *inventoryCursorPosition, int *HP,
+void useItem (struct hero *hero, string itemList[][2],
+              int *inventoryCursorPosition,
               string log[], int *inventoryMode) {
-    string currentItem = itemList[inventory[*inventoryCursorPosition - 2]][0];
+    string currentItem = itemList[hero -> inventory[*inventoryCursorPosition - 2]][0];
 
     if (currentItem == "Зелье")
-        *HP += 20;
+        hero -> HP += 20;
     else if (currentItem == "Яд")
-        *HP -= 20;
+        hero -> HP -= 20;
     else if (currentItem == "")
         logMessage("Вы выбрали пустую ячейку", log);
     else
         logMessage("Данный предмет не может быть использован", log);
  
-    inventory[*inventoryCursorPosition - 2] = 0;
+    hero -> inventory[*inventoryCursorPosition - 2] = 0;
     *inventoryMode = 0;
 }
 
 void enemyCheck (struct enemy enemies[], int enemySize,
-                 int heroX, int heroY, int *battleMode,
+                 struct hero *hero, int *battleMode,
                  struct enemy *battler) {
     
     for (int i = 0; i < enemySize; i++) {
-        if (enemies[i].x == heroX && enemies[i].y == heroY) {
+        if (enemies[i].x == hero -> x && enemies[i].y == hero -> y) {
             *battleMode = 1;
             *battler = enemies[i];
         }
     }
 }
 
-void heroAction (char map[][20], int *heroX, int *heroY,
-                 char *lastCell, int *HP, string log[],
-                 int inventory[], int *clearInventorySlot,
+void heroAction (char map[][20], struct hero *hero, string log[],
                  string itemList[][2], int itemMap[][3],
                  int itemMapSize, int *inventoryMode,
 		 int *inventoryCursorPosition, struct enemy enemies[],
@@ -188,21 +189,19 @@ void heroAction (char map[][20], int *heroX, int *heroY,
 
     if ((int)userAction == 27 && *inventoryMode == 0)
         moveHero(
-            map, heroX, heroY,
-            lastCell, HP, log,
-            inventory, clearInventorySlot,
+            map, hero, log,
             itemList, itemMap, itemMapSize,
             currentLevel, newLevel
         );
     else if (userAction == 'e') 
-        examine(map, heroX, heroY, log, itemList, itemMap, itemMapSize);
+        examine(map, hero, log, itemList, itemMap, itemMapSize);
     else if (userAction == 'i')
-	*inventoryMode = !(*inventoryMode);
+        *inventoryMode = !(*inventoryMode);
     else if ((int)userAction == 27 && *inventoryMode == 1)
-	moveItemCursor(inventoryCursorPosition);
+        moveItemCursor(inventoryCursorPosition);
     else if (userAction == '\n' && *inventoryMode == 1)
-        useItem(inventory, itemList, inventoryCursorPosition, HP, log, inventoryMode);
+        useItem(hero, itemList, inventoryCursorPosition, log, inventoryMode);
 
-    enemyCheck(enemies, enemiesSize, *heroX, *heroY, battleMode, battler);
+    enemyCheck(enemies, enemiesSize, hero, battleMode, battler);
 }
 

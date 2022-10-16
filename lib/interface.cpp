@@ -110,15 +110,16 @@ void reload (char map[][20], int mapSize, struct hero *hero,
              int battleMode, struct enemy *battler) {
 
     if (battleMode) {
+        showLog(log);
         logMessage("Вы деретесь против " + battler -> name, log);
     } else {
         drawMap(map, mapSize, hero, enemies, enemiesSize);
         showInfo(hero);
+        showLog(log);
         showInventory(
             hero, itemList,
             inventoryMode, inventoryCursorPosition
         );
     }
 
-    showLog(log);
 }
