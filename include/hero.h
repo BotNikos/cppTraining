@@ -1,4 +1,15 @@
 #include <iostream>
+
+struct hero {
+    int HP;
+    int x;
+    int y;
+    int damage;
+    int inventory[20];
+    int clearInventorySlot;
+    char lastCell;
+};
+
 void heroAction(char map[][20], int *heroX, int *heroY,
                 char *lastCell,
                 int *HP, std::string log[],

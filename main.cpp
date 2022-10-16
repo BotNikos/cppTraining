@@ -6,13 +6,25 @@
 #include "include/interface.h"
 #include "include/levels.h"
 
+#include "include/conio.h"
+
 using namespace std;
 
 int main () {
-    int heroX = 2;
-    int heroY = 1;
-    int HP = 100;
-    char lastCell = '.';
+    // int heroX = 2;
+    // int heroY = 1;
+    // int HP = 100;
+    // char lastCell = '.';
+
+    struct hero hero = {
+        100,                                                           // HP
+        1,                                                             // x
+        1,                                                             // y
+        10,                                                            // damage
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},  // inventory
+        0,                                                             // clearInventoryslot
+        '.',                                                           // lastCell
+    };
 
     string itemList[][2] = {
         {"", "Пустой элемент"},
@@ -26,8 +38,8 @@ int main () {
         {2, 6, 2}
     };
 
-    int inventory[20] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    int clearInventorySlot = 0;
+    // int inventory[20] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    // int clearInventorySlot = 0;
     int inventoryMode = 0;
     int inventoryCursorPosition = 2;
 
@@ -52,34 +64,33 @@ int main () {
     while (1 == 1) {
         system("clear");
         reload(
-            map, &heroY, &heroX,
-            20, &HP, &lastCell,
-            log, inventory,
-            clearInventorySlot, itemList,
+            map, 20, &hero, log, itemList,
 	    inventoryMode, inventoryCursorPosition,
             enemies, enemiesSize, battleMode, &battler
         );
 
-        heroAction(
-            map, &heroX, &heroY,
-            &lastCell, &HP, log,
-            inventory, &clearInventorySlot,
-            itemList, itemMap, sizeof(itemMap),
-	    &inventoryMode, &inventoryCursorPosition,
-            enemies, enemiesSize, &battleMode, &battler,
-            &currentLevel, &newLevel
-        );
+        getch();
 
-        if (newLevel) {
-            heroX = 1;
-            heroY = 1;
-            memmove(map, level2, 400);
-            clearEnemies(enemies, &enemiesSize);
-            newLevel = 0;
-            logMessage("Вы перешли на новый уровень", log);
-        }
+        // heroAction(
+        //     map, &heroX, &heroY,
+        //     &lastCell, &HP, log,
+        //     inventory, &clearInventorySlot,
+        //     itemList, itemMap, sizeof(itemMap),
+	//     &inventoryMode, &inventoryCursorPosition,
+        //     enemies, enemiesSize, &battleMode, &battler,
+        //     &currentLevel, &newLevel
+        // );
 
-        enemyAction(map, heroX, heroY, enemies, &enemiesSize);
+        // if (newLevel) {
+        //     heroX = 1;
+        //     heroY = 1;
+        //     memmove(map, level2, 400);
+        //     clearEnemies(enemies, &enemiesSize);
+        //     newLevel = 0;
+        //     logMessage("Вы перешли на новый уровень", log);
+        // }
+
+        // enemyAction(map, heroX, heroY, enemies, &enemiesSize);
     }
 
     return 0;

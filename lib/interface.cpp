@@ -1,19 +1,20 @@
 #include <iostream>
 #include "../include/enemy.h"
+#include "../include/hero.h"
 
 using namespace std;
 
-void showInfo (int *heroX, int *heroY, int *HP, char *lastCell) {
+void showInfo (struct hero *hero) {
     cout << "\033[s";
     cout << "\033[1;26H" << "User info:";
-    cout << "\033[3;26H" << "HP: " << *HP;
-    cout << "\033[4;26H" << "X: " << *heroX << " Y: " << *heroY;
-    cout << "\033[5;26H" << "Cell under hero: " << *lastCell;
+    cout << "\033[3;26H" << "HP: " << hero -> HP;
+    cout << "\033[4;26H" << "X: " << hero -> x << " Y: " << hero -> y;
+    cout << "\033[5;26H" << "Cell under hero: " << hero -> lastCell;
     cout << "\033[u";
 }
 
-void drawMap (char map[][20], int heroY, int heroX,
-              int mapSize, struct enemy enemies[], int enemiesSize) {
+void drawMap (char map[][20], int mapSize, struct hero *hero,
+              struct enemy enemies[], int enemiesSize) {
 
     const string defaultColor = "\033[0m";
     const string yellowColor = "\033[0;33m";
@@ -21,8 +22,8 @@ void drawMap (char map[][20], int heroY, int heroX,
     const string greenColor = "\033[0;32m";
     const string redColor = "\033[0;31m";
 
-    int startCoordsY = ((heroY - 5) < 0) ? 0 : ((heroY + 5) >= mapSize) ? mapSize - 11 : heroY - 5;
-    int startCoordsX = ((heroX - 5) < 0) ? 0 : ((heroX + 5) >= mapSize) ? mapSize - 11 : heroX - 5;
+    int startCoordsY = ((hero -> y - 5) < 0) ? 0 : ((hero -> y + 5) >= mapSize) ? mapSize - 11 : hero -> y - 5;
+    int startCoordsX = ((hero -> x - 5) < 0) ? 0 : ((hero -> x + 5) >= mapSize) ? mapSize - 11 : hero -> x - 5;
 
     for (int i = 0; i < enemiesSize; i++) {
         map[enemies[i].y][enemies[i].x] = 'E';
@@ -60,7 +61,7 @@ void drawMap (char map[][20], int heroY, int heroX,
     cout << defaultColor;
 }
 
-void showInventory (int inventory[], int clearInventorySlot, string itemList[][2],
+void showInventory (struct hero *hero, string itemList[][2],
 		    int inventoryMode, int inventoryCursorPosition) {
     for (int i = 0; i < 24; i++)
         cout << "\033[" << i << ";44H" << "|\n";
@@ -68,8 +69,8 @@ void showInventory (int inventory[], int clearInventorySlot, string itemList[][2
 
     cout << "\033[s";
     cout << "\033[0;47H" << "Инвентарь:";
-    for (int i = 1; i <= clearInventorySlot; i++) {
-        int itemId = inventory[i - 1];
+    for (int i = 1; i <= hero -> clearInventorySlot; i++) {
+        int itemId = hero -> inventory[i - 1];
         string itemName = itemList[itemId][0];
         string itemDesc = itemList[itemId][1];
         cout << "\033[" << i + 1 << ";47H" << itemName;
@@ -102,26 +103,22 @@ void logMessage (string message, string log[]) {
     
 //}
 
-void reload (char map[][20], int *heroY,
-             int *heroX, int mapSize, int *HP,
-             char *lastCell, string log[],
-             int inventory[], int clearInventorySlot,
-             string itemList[][2], int inventoryMode,
+void reload (char map[][20], int mapSize, struct hero *hero,
+             string log[], string itemList[][2], int inventoryMode,
 	     int inventoryCursorPosition,
              struct enemy enemies[], int enemiesSize,
              int battleMode, struct enemy *battler) {
 
     if (battleMode) {
-        logMessage("Вы деретесь против " + battler->name, log);
+        logMessage("Вы деретесь против " + battler -> name, log);
     } else {
-        drawMap(map, *heroY, *heroX, mapSize, enemies, enemiesSize);
-        showInfo(heroX, heroY, HP, lastCell);
+        drawMap(map, mapSize, hero, enemies, enemiesSize);
+        showInfo(hero);
         showInventory(
-            inventory, clearInventorySlot, itemList,
+            hero, itemList,
             inventoryMode, inventoryCursorPosition
         );
     }
 
     showLog(log);
-
 }
