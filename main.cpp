@@ -12,14 +12,18 @@ using namespace std;
 
 int main () {
     struct hero hero = {
-        100,                                                           // HP
-        2,                                                             // x
-        1,                                                             // y
-        10,                                                            // damage
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},  // inventory
-        0,                                                             // clearInventoryslot
-        '.',                                                           // lastCell
+        100, // HP
+        2,   // x
+        1,   // y
+        10,  // damage
+        {},  // inventory
+        0,   // clearInventoryslot
+        '.', // lastCell
     };
+
+    // filling hero inventory with empty slots
+    for (int i = 0; i < 20; i++)
+        hero.inventory[i] = 0;
 
     string itemList[][2] = {
         {"", "Пустой элемент"},
