@@ -2,13 +2,13 @@
 #+Author: Nikita Bolotov
 
 * Description
-This is a hobby game for better understanding how C/C++ language works.
-All game runs into terminat and using only ASCII symbols.
+    This is a hobby game for better understanding how C/C++ language works.
+    All game runs into terminat and using only ASCII symbols.
 
 * Dependencies 
-To compile the game you need:
-1. Make
-2. Cmake
+    To compile the game you need:
+    1. Make
+    2. Cmake
 
 * Installation
 ** Cloning
@@ -67,12 +67,15 @@ To compile the game you need:
 - [ ] Enemy follow for player, considering walls
 - [ ] Enemy attack player
   
-** Levels [2/4]
-*** Levels todo
+** Levels
+*** Levels todo [2/7]
 - [X] Traps
 - [X] Player can walktrough level
 - [ ] Level editor 
 - [ ] Hidden rooms
+- [ ] Item list for different levels
+- [ ] Different enemies for different levels
+  
 *** Lelevs working descripion
     Levels store in include/levels.h file.
     To load level in game, you need put level variable data from levels.h into map variable in main.cpp

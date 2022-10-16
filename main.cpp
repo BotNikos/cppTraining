@@ -76,6 +76,7 @@ int main () {
             memmove(map, level2, 400);
             clearEnemies(enemies, &enemiesSize);
             newLevel = 0;
+            logMessage("Вы перешли на новый уровень", log);
         }
 
         enemyAction(map, heroX, heroY, enemies, &enemiesSize);
