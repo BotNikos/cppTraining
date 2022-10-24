@@ -3,7 +3,7 @@
 
 * Description
     This is a hobby game for better understanding how C/C++ language works.
-    All game runs into terminat and using only ASCII symbols.
+    All game runs into terminat and using only ASCII and Unicode symbols.
 
 * Dependencies 
     To compile the game you need:
@@ -80,9 +80,10 @@
     Levels store in include/levels.h file.
     To load level in game, you need put level variable data from levels.h into map variable in main.cpp
 
-** Interface [4/4]
+** Interface [5/5]
 - [X] Map
 - [X] Player data
 - [X] Event log
 - [X] Inventory
+- [X] Battle screen
   

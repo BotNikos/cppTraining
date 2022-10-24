@@ -168,14 +168,30 @@ void useItem (struct hero *hero, string itemList[][2],
 
 void enemyCheck (struct enemy enemies[], int enemySize,
                  struct hero *hero, int *battleMode,
-                 struct enemy *battler) {
+                 struct enemy *battler, string log[]) {
     
     for (int i = 0; i < enemySize; i++) {
         if (enemies[i].x == hero -> x && enemies[i].y == hero -> y) {
             *battleMode = 1;
             *battler = enemies[i];
+            logMessage("Вы деретесь против " + battler -> name, log);
         }
     }
+}
+
+void moveBattleCursor (int *battleAction) {
+    enum dirctions {up = 65, down, right, left};
+
+    getch();
+    int direction = getch();
+
+    switch (direction){
+        case up: *battleAction = 0; break;
+        case left: *battleAction = 1; break;
+        case right: *battleAction = 2; break;
+        case down: *battleAction = 3; break;
+    }
+
 }
 
 void heroAction (char map[][20], struct hero *hero, string log[],
@@ -183,11 +199,11 @@ void heroAction (char map[][20], struct hero *hero, string log[],
                  int itemMapSize, int *inventoryMode,
 		 int *inventoryCursorPosition, struct enemy enemies[],
                  int enemiesSize, int *battleMode, struct enemy *battler,
-                 int *currentLevel, int *newLevel) {
+                 int *currentLevel, int *newLevel, int *battleAction) {
 
     char userAction = getch();
 
-    if ((int)userAction == 27 && *inventoryMode == 0)
+    if ((int)userAction == 27 && *inventoryMode == 0 && *battleMode == 0)
         moveHero(
             map, hero, log,
             itemList, itemMap, itemMapSize,
@@ -199,9 +215,12 @@ void heroAction (char map[][20], struct hero *hero, string log[],
         *inventoryMode = !(*inventoryMode);
     else if ((int)userAction == 27 && *inventoryMode == 1)
         moveItemCursor(inventoryCursorPosition);
+    else if ((int)userAction == 27 && *battleMode == 1)
+        moveBattleCursor(battleAction);
     else if (userAction == '\n' && *inventoryMode == 1)
         useItem(hero, itemList, inventoryCursorPosition, log, inventoryMode);
 
-    enemyCheck(enemies, enemiesSize, hero, battleMode, battler);
+    if (*battleMode == 0)
+        enemyCheck(enemies, enemiesSize, hero, battleMode, battler, log);
 }
 

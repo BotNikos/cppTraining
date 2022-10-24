@@ -99,19 +99,74 @@ void logMessage (string message, string log[]) {
     log[9] = message;
 }
 
-//void showBattleScreen (int *HP, struct enemy *battler) {
-    
-//}
+
+void drawBorder (int x, int y, int stringSize) {
+
+    cout << "\033[" << y << ";" << x << "H";
+    for (int i = 0; i < 10; i++) {
+        cout << "━";
+    }
+
+    cout << "\033[" << y << ";" << (x - 1) << "H" << "┏";
+    cout << "\033[" << (y + 1) << ";" << (x - 1) << "H" << "┃";
+    cout << "\033[" << (y + 2) << ";" << (x - 1) << "H" << "┗";
+
+    cout << "\033[" << (y + 2) << ";" << x << "H";
+    for (int i = 0; i < 10; i++) {
+        cout << "━";
+    }
+
+    cout << "\033[" << y << ";" << (x + 10)  << "H" << "┓";
+    cout << "\033[" << (y + 1) << ";" << (x + 10) << "H" << "┃";
+    cout << "\033[" << (y + 2) << ";" << (x + 10) << "H" << "┛";
+
+}
+
+// 48 chars for map window
+
+void showBattleScreen (struct hero *hero, struct enemy *battler, int battleAction, string log[]) {
+    // enemy name and HP bar
+    cout << "\033[0;0H" << battler -> name << " [";
+    for (int i = 0; i < (39 - battler -> name.size()); i++) {
+        cout << "█";
+    }
+    cout << "]";
+
+    // user actions in battle
+    cout << "\033[4;19H" << "Attack";
+    drawBorder(17, 3, 6);    
+
+    cout << "\033[7;5H" << "Spells";
+    drawBorder(3, 6, 5);    
+
+    cout << "\033[7;35H" << "Item";
+    drawBorder(32, 6, 4);    
+
+    cout << "\033[10;19H" << "Escape";
+    drawBorder(17, 9, 7);    
+
+    switch (battleAction) {
+        case 0: cout << "\033[6;21H" << "▲▲"; break;
+        case 1: cout << "\033[7;15H" << "◀"; break;
+        case 2: cout << "\033[7;29H" << "▶"; break;
+        case 3: cout << "\033[8;21H" << "▼▼"; break;
+    }
+
+}
 
 void reload (char map[][20], int mapSize, struct hero *hero,
              string log[], string itemList[][2], int inventoryMode,
 	     int inventoryCursorPosition,
              struct enemy enemies[], int enemiesSize,
-             int battleMode, struct enemy *battler) {
+             int battleMode, struct enemy *battler, int battleAction) {
 
     if (battleMode) {
+        showBattleScreen (hero, battler, battleAction, log);
         showLog(log);
-        logMessage("Вы деретесь против " + battler -> name, log);
+        showInventory(
+            hero, itemList,
+            inventoryMode, inventoryCursorPosition
+        );
     } else {
         drawMap(map, mapSize, hero, enemies, enemiesSize);
         showInfo(hero);

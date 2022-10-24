@@ -14,4 +14,5 @@ void heroAction(char map[][20], struct hero *hero, std::string log[],
                 std::string itemList[][2], int itemMap[][3],
                 int itemMapSize, int *inventoryMode, int *inventoryCursorPosition,
                 struct enemy enemies[], int ememySize, int *battleMode,
-                struct enemy *battler, int *currentLevel, int *newLevel);
+                struct enemy *battler, int *currentLevel, int *newLevel,
+                int *battleAction);

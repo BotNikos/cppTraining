@@ -41,6 +41,7 @@ int main () {
     int inventoryCursorPosition = 2;
 
     int battleMode = 0;
+    int battleAction = 2; // 0 - Attack; 1 - Spells; 2 - Item; 3 - Escape;
     struct enemy battler;
 
     int newLevel = 0;
@@ -63,7 +64,8 @@ int main () {
         reload(
             map, 20, &hero, log, itemList,
 	    inventoryMode, inventoryCursorPosition,
-            enemies, enemiesSize, battleMode, &battler
+            enemies, enemiesSize, battleMode, &battler,
+            battleAction 
         );
 
         heroAction(
@@ -71,7 +73,7 @@ int main () {
             itemList, itemMap, sizeof(itemMap),
 	    &inventoryMode, &inventoryCursorPosition,
             enemies, enemiesSize, &battleMode, &battler,
-            &currentLevel, &newLevel
+            &currentLevel, &newLevel, &battleAction
         );
 
         if (newLevel) {
