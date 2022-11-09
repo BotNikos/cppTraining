@@ -34,7 +34,8 @@ int main () {
     // data structure {item number from item arr, item y, item x}
     int itemMap[][3] = {
         {1, 1, 3},
-        {2, 6, 2}
+        {2, 6, 2},
+        {1, 8, 2}
     };
 
     int inventoryMode = 0;

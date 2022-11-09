@@ -86,4 +86,13 @@
 - [X] Event log
 - [X] Inventory
 - [X] Battle screen
+
+** Level generator [0/5]
+- [ ] Wall placement 
+- [ ] Item placement
+- [ ] Enemies placement
+- [ ] Traps placement
+- [ ] Rerender without system ("clear") through deleting chars
+
+  
   
