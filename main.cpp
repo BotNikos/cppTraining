@@ -18,7 +18,7 @@ int main () {
         10,  // damage
         {},  // inventory
         0,   // clearInventoryslot
-        '.', // lastCell
+        Floor, // lastCell
     };
 
     // filling hero inventory with empty slots
@@ -47,8 +47,8 @@ int main () {
 
     int newLevel = 0;
     int currentLevel = 1;
-    char map[20][20];
-    memmove(map, level1, 400); // copying 400 bytes from level1 to map array
+    enum cells map[20][20];
+    memmove(map, newLevelStyle, 1600); // copying 400 bytes from level1 to map array
 
     struct enemy enemies[] = {"Rat", 'R', 20, 3, '.', 3, 2, "Goblin", 'G', 40, 10, '.', 2, 2};
     int enemiesSize = sizeof(enemies)/sizeof(enemy);
@@ -64,7 +64,7 @@ int main () {
         system("clear");
         reload(
             map, 20, &hero, log, itemList,
-	    inventoryMode, inventoryCursorPosition,
+            inventoryMode, inventoryCursorPosition,
             enemies, enemiesSize, battleMode, &battler,
             battleAction 
         );
@@ -77,16 +77,16 @@ int main () {
             &currentLevel, &newLevel, &battleAction
         );
 
-        if (newLevel) {
-            hero.x = 1;
-            hero.y = 1;
-            memmove(map, level2, 400);
-            clearEnemies(enemies, &enemiesSize);
-            newLevel = 0;
-            logMessage("Вы перешли на новый уровень", log);
-        }
+        // if (newLevel) {
+        //     hero.x = 1;
+        //     hero.y = 1;
+        //     memmove(map, level2, 400);
+        //     clearEnemies(enemies, &enemiesSize);
+        //     newLevel = 0;
+        //     logMessage("Вы перешли на новый уровень", log);
+        // }
 
-        enemyAction(map, &hero, enemies, &enemiesSize);
+        // enemyAction(map, &hero, enemies, &enemiesSize);
     }
 
     return 0;

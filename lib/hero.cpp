@@ -9,7 +9,7 @@
 
 using namespace std;
 
-void moveHero(char map[][20], struct hero *hero, string log[],
+void moveHero(enum cells map[][20], struct hero *hero, string log[],
               string itemList[][2], int itemMap[][3],
               int itemMapSize, int *currentLevel, int *newLevel) {
 
@@ -44,15 +44,15 @@ void moveHero(char map[][20], struct hero *hero, string log[],
 
     logMessage(message, log);
 
-    char currentCell = map[hero -> y][hero -> x];
+    enum cells currentCell = map[hero -> y][hero -> x];
 
-    if (currentCell == 'T') {
+    if (currentCell == Trap) {
         hero -> HP -= 40;
         hero -> lastCell = map[hero -> y][hero -> x];
-        map[hero -> y][hero -> x] = '@';
+        map[hero -> y][hero -> x] = Player;
 
         logMessage("Вы наступили на ловушку, HP - 40", log);
-    }  else if (currentCell == 'I') {
+    }  else if (currentCell == Item) {
 
         for (int i = 0; i < itemMapSize; i++) {
             if (itemMap[i][1] == hero -> y && itemMap[i][2] == hero -> x) {
@@ -62,19 +62,19 @@ void moveHero(char map[][20], struct hero *hero, string log[],
             }
         }
 
-        hero -> lastCell = '.';
-        map[hero -> y][hero -> x] = '@';
+        hero -> lastCell = Floor;
+        map[hero -> y][hero -> x] = Player;
 
-    } else if (currentCell == '^') {
+    } else if (currentCell == Up) {
         *newLevel = 1;
         *currentLevel++;
-    } else if (currentCell != '#') {
+    } else if (currentCell != Wall) {
         hero -> lastCell = map[hero -> y][hero -> x];
-        map[hero -> y][hero -> x] = '@';
+        map[hero -> y][hero -> x] = Player;
     } else {
         hero -> x = lastX;
         hero -> y = lastY;
-        map[lastY][lastX] = '@';
+        map[lastY][lastX] = Player;
     }
 }
 
@@ -194,7 +194,7 @@ void moveBattleCursor (int *battleAction) {
 
 }
 
-void heroAction (char map[][20], struct hero *hero, string log[],
+void heroAction (enum cells map[][20], struct hero *hero, string log[],
                  string itemList[][2], int itemMap[][3],
                  int itemMapSize, int *inventoryMode,
 		 int *inventoryCursorPosition, struct enemy enemies[],
@@ -203,24 +203,24 @@ void heroAction (char map[][20], struct hero *hero, string log[],
 
     char userAction = getch();
 
-    if ((int)userAction == 27 && *inventoryMode == 0 && *battleMode == 0)
+    // if ((int)userAction == 27 && *inventoryMode == 0 && *battleMode == 0)
         moveHero(
             map, hero, log,
             itemList, itemMap, itemMapSize,
             currentLevel, newLevel
         );
-    else if (userAction == 'e') 
-        examine(map, hero, log, itemList, itemMap, itemMapSize);
-    else if (userAction == 'i')
-        *inventoryMode = !(*inventoryMode);
-    else if ((int)userAction == 27 && *inventoryMode == 1)
-        moveItemCursor(inventoryCursorPosition);
-    else if ((int)userAction == 27 && *battleMode == 1)
-        moveBattleCursor(battleAction);
-    else if (userAction == '\n' && *inventoryMode == 1)
-        useItem(hero, itemList, inventoryCursorPosition, log, inventoryMode);
+    // else if (userAction == 'e') 
+    //     examine(map, hero, log, itemList, itemMap, itemMapSize);
+    // else if (userAction == 'i')
+    //     *inventoryMode = !(*inventoryMode);
+    // else if ((int)userAction == 27 && *inventoryMode == 1)
+    //     moveItemCursor(inventoryCursorPosition);
+    // else if ((int)userAction == 27 && *battleMode == 1)
+    //     moveBattleCursor(battleAction);
+    // else if (userAction == '\n' && *inventoryMode == 1)
+    //     useItem(hero, itemList, inventoryCursorPosition, log, inventoryMode);
 
-    if (*battleMode == 0)
-        enemyCheck(enemies, enemiesSize, hero, battleMode, battler, log);
+    // if (*battleMode == 0)
+    //     enemyCheck(enemies, enemiesSize, hero, battleMode, battler, log);
 }
 

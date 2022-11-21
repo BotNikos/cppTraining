@@ -1,6 +1,7 @@
 #include <iostream>
 #include "../include/enemy.h"
 #include "../include/hero.h"
+#include "../include/interface.h"
 
 using namespace std;
 
@@ -13,7 +14,7 @@ void showInfo (struct hero *hero) {
     cout << "\033[u";
 }
 
-void drawMap (char map[][20], int mapSize, struct hero *hero,
+void drawMap (enum cells map[][20], int mapSize, struct hero *hero,
               struct enemy enemies[], int enemiesSize) {
 
     const string defaultColor = "\033[0m";
@@ -25,34 +26,39 @@ void drawMap (char map[][20], int mapSize, struct hero *hero,
     int startCoordsY = ((hero -> y - 5) < 0) ? 0 : ((hero -> y + 5) >= mapSize) ? mapSize - 11 : hero -> y - 5;
     int startCoordsX = ((hero -> x - 5) < 0) ? 0 : ((hero -> x + 5) >= mapSize) ? mapSize - 11 : hero -> x - 5;
 
-    for (int i = 0; i < enemiesSize; i++) {
-        map[enemies[i].y][enemies[i].x] = 'E';
-    }
+    // for (int i = 0; i < enemiesSize; i++) {
+    //     map[enemies[i].y][enemies[i].x] = 'E';
+    // }
 
     for (int i = 0; i < 11; i++) {
         for (int j = 0; j < 11; j++) {
-            char currentCell = map[startCoordsY + i][startCoordsX + j];
+            cells currentCell = map[startCoordsY + i][startCoordsX + j];
 
-            if (currentCell == '#') 
-                cout << yellowColor;
-            else if (currentCell == '@')
-                cout << cyanColor;
-            else if (currentCell == 'T') 
-                cout << redColor << ". ";
-            else if (currentCell == 'I')
-                cout << greenColor << ". ";
-            else if (currentCell == '^')
-                cout << greenColor;
-            else if (currentCell == 'E') {
-                for (int e = 0; e < 2; e++) {
-                    if (enemies[e].x == (startCoordsX + j) && enemies[e].y == (startCoordsY + i))
-                        cout << redColor << enemies[e].symb << " ";
-                }
-            } else 
-                cout << defaultColor;
 
-            if (currentCell != 'T' && currentCell != 'I' && currentCell != 'E')
-                cout << currentCell << " ";
+            switch (currentCell) {
+                case Wall: cout << yellowColor << "# "; break;
+                case Floor: cout << ". "; break;
+                case Player: cout << cyanColor << "@ "; break;
+            }
+
+            cout << defaultColor;
+
+            // else if (currentCell == 'T') 
+            //     cout << redColor << ". ";
+            // else if (currentCell == 'I')
+            //     cout << greenColor << ". ";
+            // else if (currentCell == '^')
+            //     cout << greenColor;
+            // else if (currentCell == 'E') {
+            //     for (int e = 0; e < 2; e++) {
+            //         if (enemies[e].x == (startCoordsX + j) && enemies[e].y == (startCoordsY + i))
+            //             cout << redColor << enemies[e].symb << " ";
+            //     }
+            // } else 
+            //     cout << defaultColor;
+
+            // if (currentCell != 'T' && currentCell != 'I' && currentCell != 'E')
+            //     cout << currentCell << " ";
         }
         
         cout << defaultColor << " |" << '\n';
@@ -154,7 +160,7 @@ void showBattleScreen (struct hero *hero, struct enemy *battler, int battleActio
 
 }
 
-void reload (char map[][20], int mapSize, struct hero *hero,
+void reload (enum cells map[][20], int mapSize, struct hero *hero,
              string log[], string itemList[][2], int inventoryMode,
 	     int inventoryCursorPosition,
              struct enemy enemies[], int enemiesSize,
