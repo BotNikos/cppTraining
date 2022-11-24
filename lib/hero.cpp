@@ -9,6 +9,15 @@
 
 using namespace std;
 
+int findItem (enum cells items[], int itemsSize, enum cells target) {
+    for (int i = 0; i < itemsSize; i++) {
+        if (items[i] == target)
+            return 1;
+    }
+
+    return 0;
+}
+
 void moveHero(enum cells map[][20], struct hero *hero, string log[],
               string itemList[][2], int itemMap[][3],
               int itemMapSize, int *currentLevel, int *newLevel) {
@@ -46,23 +55,19 @@ void moveHero(enum cells map[][20], struct hero *hero, string log[],
 
     enum cells currentCell = map[hero -> y][hero -> x];
 
+    enum cells items[] = {Potion};
+
     if (currentCell == Trap) {
         hero -> HP -= 40;
         hero -> lastCell = map[hero -> y][hero -> x];
         map[hero -> y][hero -> x] = Player;
 
         logMessage("Вы наступили на ловушку, HP - 40", log);
-    }  else if (currentCell == Item) {
+    }  else if (findItem(items, sizeof(items), currentCell)) {
 
-        for (int i = 0; i < itemMapSize; i++) {
-            if (itemMap[i][1] == hero -> y && itemMap[i][2] == hero -> x) {
-                hero -> inventory[hero -> clearInventorySlot] = itemMap[i][0];
-                hero -> clearInventorySlot++;
-                logMessage("Вы подобрали: " + itemList[itemMap[i][0]][0], log);
-            }
-        }
-
+        hero -> inventory[hero -> clearInventorySlot] = currentCell;
         hero -> lastCell = Floor;
+        // logMessage("Вы подобрали: " + itemList[itemMap[i][0]][0], log);
         map[hero -> y][hero -> x] = Player;
 
     } else if (currentCell == Up) {

@@ -13,7 +13,7 @@ using namespace std;
 int main () {
     struct hero hero = {
         100, // HP
-        2,   // x
+        1,   // x
         1,   // y
         10,  // damage
         {},  // inventory
@@ -30,6 +30,8 @@ int main () {
         {"Зелье", "восстанавливает 20 ОЗ"},
         {"Яд", "отнимает 20 ОЗ"}
     };
+
+    enum itemsDB {Potion = 6};
 
     // data structure {item number from item arr, item y, item x}
     int itemMap[][3] = {

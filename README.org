@@ -75,6 +75,8 @@
 - [ ] Hidden rooms
 - [ ] Item list for different levels
 - [ ] Different enemies for different levels
+- [ ] Change map style from char matrix to enum matrix
+- [ ] Item name on map
   
 *** Lelevs working descripion
     Levels store in include/levels.h file.

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "../include/enemy.h"
-#include "../include/hero.h"
 #include "../include/interface.h"
+#include "../include/hero.h"
 
 using namespace std;
 
@@ -34,17 +34,18 @@ void drawMap (enum cells map[][20], int mapSize, struct hero *hero,
         for (int j = 0; j < 11; j++) {
             cells currentCell = map[startCoordsY + i][startCoordsX + j];
 
-
             switch (currentCell) {
                 case Wall: cout << yellowColor << "# "; break;
                 case Floor: cout << ". "; break;
                 case Player: cout << cyanColor << "@ "; break;
+                case Trap: cout << redColor << ". "; break;
+
+                // items
+                case Potion: cout << greenColor << ". "; break;
             }
 
             cout << defaultColor;
 
-            // else if (currentCell == 'T') 
-            //     cout << redColor << ". ";
             // else if (currentCell == 'I')
             //     cout << greenColor << ". ";
             // else if (currentCell == '^')

@@ -8,7 +8,7 @@ struct hero {
     int damage;
     int inventory[20];
     int clearInventorySlot;
-    char lastCell;
+    enum cells lastCell;
 };
 
 void heroAction(enum cells map[][20], struct hero *hero, std::string log[],

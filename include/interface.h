@@ -1,5 +1,14 @@
 #include <iostream>
-enum cells {Wall, Floor, Player, Trap, Item, Up};
+
+#ifndef INTERFACE_H
+#define INTERFACE_H
+enum cells {
+    Wall, Floor, Player, Trap, Item, Up,
+
+    // items
+    Potion};
+#endif
+
 
 void logMessage (std::string message, std::string log[]);
 void reload (enum cells map[][20], int mapSize, struct hero *hero,
