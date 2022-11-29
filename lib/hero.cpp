@@ -19,8 +19,8 @@ int findItem (enum cells items[], int itemsSize, enum cells target) {
 }
 
 void moveHero(enum cells map[][20], struct hero *hero, string log[],
-              string itemList[][2], int itemMap[][3],
-              int itemMapSize, int *currentLevel, int *newLevel) {
+              struct item itemList[], int itemListSize,
+              int *currentLevel, int *newLevel) {
 
     enum dirctions {up = 65, down, right, left};
 
@@ -55,7 +55,7 @@ void moveHero(enum cells map[][20], struct hero *hero, string log[],
 
     enum cells currentCell = map[hero -> y][hero -> x];
 
-    enum cells items[] = {Potion};
+    enum cells items[] = {Potion}; // Potion = 6 because is have enum cells data structure
 
     if (currentCell == Trap) {
         hero -> HP -= 40;
@@ -66,8 +66,12 @@ void moveHero(enum cells map[][20], struct hero *hero, string log[],
     }  else if (findItem(items, sizeof(items), currentCell)) {
 
         hero -> inventory[hero -> clearInventorySlot] = currentCell;
+        hero -> clearInventorySlot++;
         hero -> lastCell = Floor;
-        // logMessage("Вы подобрали: " + itemList[itemMap[i][0]][0], log);
+        for (int i = 0; i < itemListSize; i++) {
+            if (itemList[i].id == currentCell)
+                logMessage("Вы подобрали: " + itemList[i].name, log);
+        }
         map[hero -> y][hero -> x] = Player;
 
     } else if (currentCell == Up) {
@@ -200,18 +204,17 @@ void moveBattleCursor (int *battleAction) {
 }
 
 void heroAction (enum cells map[][20], struct hero *hero, string log[],
-                 string itemList[][2], int itemMap[][3],
-                 int itemMapSize, int *inventoryMode,
-		 int *inventoryCursorPosition, struct enemy enemies[],
-                 int enemiesSize, int *battleMode, struct enemy *battler,
-                 int *currentLevel, int *newLevel, int *battleAction) {
+                 struct item itemList[], int itemListSize,
+                 int *inventoryMode, int *inventoryCursorPosition,
+                 struct enemy enemies[], int enemiesSize, int *battleMode,
+                 struct enemy *battler, int *currentLevel, int *newLevel, int *battleAction) {
 
     char userAction = getch();
 
     // if ((int)userAction == 27 && *inventoryMode == 0 && *battleMode == 0)
         moveHero(
             map, hero, log,
-            itemList, itemMap, itemMapSize,
+            itemList, itemListSize,
             currentLevel, newLevel
         );
     // else if (userAction == 'e') 

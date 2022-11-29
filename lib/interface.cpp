@@ -3,6 +3,8 @@
 #include "../include/interface.h"
 #include "../include/hero.h"
 
+#include "../include/conio.h"
+
 using namespace std;
 
 void showInfo (struct hero *hero) {
@@ -57,9 +59,6 @@ void drawMap (enum cells map[][20], int mapSize, struct hero *hero,
             //     }
             // } else 
             //     cout << defaultColor;
-
-            // if (currentCell != 'T' && currentCell != 'I' && currentCell != 'E')
-            //     cout << currentCell << " ";
         }
         
         cout << defaultColor << " |" << '\n';
@@ -68,7 +67,7 @@ void drawMap (enum cells map[][20], int mapSize, struct hero *hero,
     cout << defaultColor;
 }
 
-void showInventory (struct hero *hero, string itemList[][2],
+void showInventory (struct hero *hero, struct item itemList[], int itemListSize,
 		    int inventoryMode, int inventoryCursorPosition) {
     for (int i = 0; i < 24; i++)
         cout << "\033[" << i << ";44H" << "|\n";
@@ -76,11 +75,19 @@ void showInventory (struct hero *hero, string itemList[][2],
 
     cout << "\033[s";
     cout << "\033[0;47H" << "Инвентарь:";
-    for (int i = 1; i <= hero -> clearInventorySlot; i++) {
-        int itemId = hero -> inventory[i - 1];
-        string itemName = itemList[itemId][0];
-        string itemDesc = itemList[itemId][1];
-        cout << "\033[" << i + 1 << ";47H" << itemName;
+    for (int i = 0; i <= hero -> clearInventorySlot; i++) {
+        int itemId = hero -> inventory[i];
+        string itemName;
+        string itemDesc;
+
+        for (int i = 0; i < itemListSize; i++) {
+            if (itemId == itemList[i].id) {
+                itemName = itemList[i].name;
+                itemDesc = itemList[i].description;
+            }
+        }
+
+        cout << "\033[" << i + 2 << ";47H" << itemName;
     }
 
     if (inventoryMode)
@@ -162,8 +169,8 @@ void showBattleScreen (struct hero *hero, struct enemy *battler, int battleActio
 }
 
 void reload (enum cells map[][20], int mapSize, struct hero *hero,
-             string log[], string itemList[][2], int inventoryMode,
-	     int inventoryCursorPosition,
+             string log[], struct item itemList[], int itemListSize,
+             int inventoryMode, int inventoryCursorPosition,
              struct enemy enemies[], int enemiesSize,
              int battleMode, struct enemy *battler, int battleAction) {
 
@@ -171,7 +178,7 @@ void reload (enum cells map[][20], int mapSize, struct hero *hero,
         showBattleScreen (hero, battler, battleAction, log);
         showLog(log);
         showInventory(
-            hero, itemList,
+            hero, itemList, itemListSize,
             inventoryMode, inventoryCursorPosition
         );
     } else {
@@ -179,7 +186,7 @@ void reload (enum cells map[][20], int mapSize, struct hero *hero,
         showInfo(hero);
         showLog(log);
         showInventory(
-            hero, itemList,
+            hero, itemList, itemListSize,
             inventoryMode, inventoryCursorPosition
         );
     }

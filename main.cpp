@@ -25,20 +25,13 @@ int main () {
     for (int i = 0; i < 20; i++)
         hero.inventory[i] = 0;
 
-    string itemList[][2] = {
-        {"", "Пустой элемент"},
-        {"Зелье", "восстанавливает 20 ОЗ"},
-        {"Яд", "отнимает 20 ОЗ"}
+    struct item itemList[] = {
+     // id, name, description
+        -1, "", "Пустой элемент",
+        6, "Зелье", "восстанавливает 20 ОЗ",
+        7, "Яд", "отнимает 20 ОЗ",
     };
-
-    enum itemsDB {Potion = 6};
-
-    // data structure {item number from item arr, item y, item x}
-    int itemMap[][3] = {
-        {1, 1, 3},
-        {2, 6, 2},
-        {1, 8, 2}
-    };
+    int itemListSize = sizeof(itemList)/sizeof(item);
 
     int inventoryMode = 0;
     int inventoryCursorPosition = 2;
@@ -65,7 +58,7 @@ int main () {
     while (1 == 1) {
         system("clear");
         reload(
-            map, 20, &hero, log, itemList,
+            map, 20, &hero, log, itemList, itemListSize,
             inventoryMode, inventoryCursorPosition,
             enemies, enemiesSize, battleMode, &battler,
             battleAction 
@@ -73,8 +66,8 @@ int main () {
 
         heroAction(
             map, &hero, log,
-            itemList, itemMap, sizeof(itemMap),
-	    &inventoryMode, &inventoryCursorPosition,
+            itemList, itemListSize,
+            &inventoryMode, &inventoryCursorPosition,
             enemies, enemiesSize, &battleMode, &battler,
             &currentLevel, &newLevel, &battleAction
         );
