@@ -87,15 +87,15 @@ void moveHero(enum cells map[][20], struct hero *hero, string log[],
     }
 }
 
-void examine (char map[][20], struct hero *hero, 
-              string log[], string itemList[][2],
-              int itemMap[][3], int itemMapSize) {
+void examine (enum cells map[][20], struct hero *hero, 
+              string log[], struct item itemList[],
+              int itemListSize) {
 
     enum dirctions {up = 65, down, right, left};
 
-    logMessage("", log);
-    logMessage("Выберете направление клетки, которую вы", log);
-    logMessage("хотите изучить", log);
+    // logMessage("", log);
+    // logMessage("Выберете направление клетки, которую вы", log);
+    // logMessage("хотите изучить", log);
 
     getch();
     getch();
@@ -103,6 +103,7 @@ void examine (char map[][20], struct hero *hero,
 
     int examineX = hero -> x;
     int examineY = hero -> y;
+
     switch (direction) {
         case up:
             examineY--; break;
@@ -116,31 +117,32 @@ void examine (char map[][20], struct hero *hero,
 
     logMessage("", log);
     switch (map[examineY][examineX]) {
-        case '.':
+        case Floor:
             logMessage("Вы смотрите на холодный пол, и не можете", log); 
             logMessage("найти ничего примечательного", log); 
             break;
-        case 'T':
+        case Trap:
             logMessage("Перед вами ловушка, которая может сделать", log); 
             logMessage("довольно больно", log); 
             break;
-        case '#':
+        case Wall:
             logMessage("Ваше внимание привлекла стена, и", log); 
             logMessage("поразглядывав ее пару минут, вы поняли, что", log); 
             logMessage("тратите время впустую", log); 
             break;
-        case  'I':
-            string examineItem[2];
-            for (int i = 0; i < itemMapSize; i++) {
-                if (examineY == itemMap[i][1] && examineX == itemMap[i][2]) {
-                    examineItem[0] = itemList[itemMap[i][0]][0];
-                    examineItem[1] = itemList[itemMap[i][0]][1];
+        case Potion:
+            string itemName;
+            string itemDesc;
+
+            for (int i = 0; i < itemListSize; i++) {
+                if (map[examineY][examineX] == itemList[i].id) {
+                    itemName = itemList[i].name;
+                    itemDesc = itemList[i].description;
                 }
             }
 
-            logMessage("Перед вами лежит предмет: " + examineItem[0], log);
-            logMessage("он " + examineItem[1], log);
-
+            logMessage("Перед вами лежит предмет: " + itemName, log);
+            logMessage("он " + itemDesc, log);
             break;
     }
 }
@@ -211,14 +213,14 @@ void heroAction (enum cells map[][20], struct hero *hero, string log[],
 
     char userAction = getch();
 
-    // if ((int)userAction == 27 && *inventoryMode == 0 && *battleMode == 0)
+    if ((int)userAction == 27 && *inventoryMode == 0 && *battleMode == 0)
         moveHero(
             map, hero, log,
             itemList, itemListSize,
             currentLevel, newLevel
         );
-    // else if (userAction == 'e') 
-    //     examine(map, hero, log, itemList, itemMap, itemMapSize);
+    else if (userAction == 'e') 
+        examine(map, hero, log, itemList, itemListSize);
     // else if (userAction == 'i')
     //     *inventoryMode = !(*inventoryMode);
     // else if ((int)userAction == 27 && *inventoryMode == 1)
