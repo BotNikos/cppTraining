@@ -5,8 +5,10 @@
 enum cells {
     Wall, Floor, Player, Trap, Item, Up,
 
-    // items
-    Potion
+    // items, after appending item here, append it to:
+    // main.cpp [28], lib/hero.cpp [58], lib/interface.cpp [46], include/levels
+    Potion,
+    Poison
 };
 
 struct item {

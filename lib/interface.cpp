@@ -43,7 +43,8 @@ void drawMap (enum cells map[][20], int mapSize, struct hero *hero,
                 case Trap: cout << redColor << ". "; break;
 
                 // items
-                case Potion: cout << greenColor << ". "; break;
+                case Potion:
+                case Poison: cout << greenColor << ". "; break;
             }
 
             cout << defaultColor;

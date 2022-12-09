@@ -1,7 +1,6 @@
 #include <iostream>
 using namespace std;
 
-
 string itemList[][2] = {
     {"Зелье", "восстанавливает 20 ОЗ"},
     {"Яд", "отнимает 20 ОЗ"}

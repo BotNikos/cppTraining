@@ -26,7 +26,7 @@ int main () {
         hero.inventory[i] = 0;
 
     struct item itemList[] = {
-     // id, name, description
+    // id, name, description
         -1, "", "Пустой элемент",
         6, "Зелье", "восстанавливает 20 ОЗ",
         7, "Яд", "отнимает 20 ОЗ",

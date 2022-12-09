@@ -18,6 +18,15 @@ int findItem (enum cells items[], int itemsSize, enum cells target) {
     return 0;
 }
 
+struct item findItemById (struct item itemList[], int itemListSize, int itemId) {
+    for (int i = 0; i < itemListSize; i++) {
+        if (itemList[i].id == itemId)
+            return itemList[i];
+    }
+
+    return {id: -1, name: "", description: "Пустой элемент"};
+}
+
 void moveHero(enum cells map[][20], struct hero *hero, string log[],
               struct item itemList[], int itemListSize,
               int *currentLevel, int *newLevel) {
@@ -55,7 +64,7 @@ void moveHero(enum cells map[][20], struct hero *hero, string log[],
 
     enum cells currentCell = map[hero -> y][hero -> x];
 
-    enum cells items[] = {Potion}; // Potion = 6 because is have enum cells data structure
+    enum cells items[] = {Potion, Poison}; // Potion = 6 because is have enum cells data structure
 
     if (currentCell == Trap) {
         hero -> HP -= 40;
@@ -63,8 +72,7 @@ void moveHero(enum cells map[][20], struct hero *hero, string log[],
         map[hero -> y][hero -> x] = Player;
 
         logMessage("Вы наступили на ловушку, HP - 40", log);
-    }  else if (findItem(items, sizeof(items), currentCell)) {
-
+    }  else if (findItem(items, sizeof(items)/sizeof(items[0]), currentCell)) {
         hero -> inventory[hero -> clearInventorySlot] = currentCell;
         hero -> clearInventorySlot++;
         hero -> lastCell = Floor;
@@ -131,6 +139,7 @@ void examine (enum cells map[][20], struct hero *hero,
             logMessage("тратите время впустую", log); 
             break;
         case Potion:
+        case Poison:
             string itemName;
             string itemDesc;
 
@@ -159,20 +168,24 @@ void moveItemCursor (int *inventoryCursorPosition) {
 	(*inventoryCursorPosition)++;
 }
 
-void useItem (struct hero *hero, string itemList[][2],
-              int *inventoryCursorPosition,
+void useItem (struct hero *hero, struct item itemList[],
+              int itemListSize, int *inventoryCursorPosition,
               string log[], int *inventoryMode) {
-    string currentItem = itemList[hero -> inventory[*inventoryCursorPosition - 2]][0];
 
-    if (currentItem == "Зелье")
-        hero -> HP += 20;
-    else if (currentItem == "Яд")
-        hero -> HP -= 20;
-    else if (currentItem == "")
-        logMessage("Вы выбрали пустую ячейку", log);
-    else
-        logMessage("Данный предмет не может быть использован", log);
- 
+    int currentItemId = hero -> inventory[*inventoryCursorPosition - 2];
+    struct item currentItem = findItemById(itemList, itemListSize, currentItemId);
+
+    switch (currentItem.id) {
+        case -1:
+            logMessage("Данный предмет не может быть использован", log); break;
+        case Potion:
+            hero -> HP += 20; break;
+        case Poison:
+            hero -> HP -= 20; break;
+        default:
+            logMessage("Вы выбрали пустую ячейку", log);
+    }
+
     hero -> inventory[*inventoryCursorPosition - 2] = 0;
     *inventoryMode = 0;
 }
@@ -221,14 +234,14 @@ void heroAction (enum cells map[][20], struct hero *hero, string log[],
         );
     else if (userAction == 'e') 
         examine(map, hero, log, itemList, itemListSize);
-    // else if (userAction == 'i')
-    //     *inventoryMode = !(*inventoryMode);
-    // else if ((int)userAction == 27 && *inventoryMode == 1)
-    //     moveItemCursor(inventoryCursorPosition);
-    // else if ((int)userAction == 27 && *battleMode == 1)
-    //     moveBattleCursor(battleAction);
-    // else if (userAction == '\n' && *inventoryMode == 1)
-    //     useItem(hero, itemList, inventoryCursorPosition, log, inventoryMode);
+    else if (userAction == 'i')
+        *inventoryMode = !(*inventoryMode);
+    else if ((int)userAction == 27 && *inventoryMode == 1)
+        moveItemCursor(inventoryCursorPosition);
+    else if ((int)userAction == 27 && *battleMode == 1)
+        moveBattleCursor(battleAction);
+    else if (userAction == '\n' && *inventoryMode == 1)
+        useItem(hero, itemList, itemListSize, inventoryCursorPosition, log, inventoryMode);
 
     // if (*battleMode == 0)
     //     enemyCheck(enemies, enemiesSize, hero, battleMode, battler, log);
