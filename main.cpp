@@ -45,8 +45,14 @@ int main () {
     enum cells map[20][20];
     memmove(map, newLevelStyle, 1600); // copying 400 bytes from level1 to map array
 
-    struct enemy enemies[] = {"Rat", 'R', 20, 3, '.', 3, 2, "Goblin", 'G', 40, 10, '.', 2, 2};
-    int enemiesSize = sizeof(enemies)/sizeof(enemy);
+    struct enemy enemiesList[] = {
+    // name, hp, damage
+        "Rat", 20, 3, 
+        "Goblin", 40, 10, 
+        "Slime", 30, 1, 
+    };
+
+    int enemiesSize = sizeof(enemiesList)/sizeof(enemy);
 
     string log[10] = {
         "Привет. Это консоль, для вывода лога твоих",
@@ -60,7 +66,7 @@ int main () {
         reload(
             map, 20, &hero, log, itemList, itemListSize,
             inventoryMode, inventoryCursorPosition,
-            enemies, enemiesSize, battleMode, &battler,
+            enemiesList, enemiesSize, battleMode, &battler,
             battleAction 
         );
 
@@ -68,7 +74,7 @@ int main () {
             map, &hero, log,
             itemList, itemListSize,
             &inventoryMode, &inventoryCursorPosition,
-            enemies, enemiesSize, &battleMode, &battler,
+            enemiesList, enemiesSize, &battleMode, &battler,
             &currentLevel, &newLevel, &battleAction
         );
 

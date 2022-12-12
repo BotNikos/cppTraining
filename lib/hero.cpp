@@ -1,6 +1,8 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
+#include <cstdlib>
+#include <time.h>
 
 #include "../include/conio.h"
 #include "../include/interface.h"
@@ -190,17 +192,18 @@ void useItem (struct hero *hero, struct item itemList[],
     *inventoryMode = 0;
 }
 
-void enemyCheck (struct enemy enemies[], int enemySize,
-                 struct hero *hero, int *battleMode,
+void enemyCheck (struct enemy enemiesList[], int enemySize, int *battleMode,
                  struct enemy *battler, string log[]) {
-    
-    for (int i = 0; i < enemySize; i++) {
-        if (enemies[i].x == hero -> x && enemies[i].y == hero -> y) {
-            *battleMode = 1;
-            *battler = enemies[i];
-            logMessage("Вы деретесь против " + battler -> name, log);
-        }
+
+    srand(time(NULL));
+    int battleChance = rand() % 7;
+    if (battleChance == 0) {
+        int battlerNum = rand() % enemySize;
+        cout << battlerNum;
+        *battler = enemiesList[battlerNum];
+        *battleMode = 1;
     }
+
 }
 
 void moveBattleCursor (int *battleAction) {
@@ -221,18 +224,19 @@ void moveBattleCursor (int *battleAction) {
 void heroAction (enum cells map[][20], struct hero *hero, string log[],
                  struct item itemList[], int itemListSize,
                  int *inventoryMode, int *inventoryCursorPosition,
-                 struct enemy enemies[], int enemiesSize, int *battleMode,
+                 struct enemy enemiesList[], int enemiesSize, int *battleMode,
                  struct enemy *battler, int *currentLevel, int *newLevel, int *battleAction) {
 
     char userAction = getch();
 
-    if ((int)userAction == 27 && *inventoryMode == 0 && *battleMode == 0)
+    if ((int)userAction == 27 && *inventoryMode == 0 && *battleMode == 0) {
         moveHero(
             map, hero, log,
             itemList, itemListSize,
             currentLevel, newLevel
         );
-    else if (userAction == 'e') 
+        enemyCheck(enemiesList, enemiesSize, battleMode, battler, log);
+    } else if (userAction == 'e') 
         examine(map, hero, log, itemList, itemListSize);
     else if (userAction == 'i')
         *inventoryMode = !(*inventoryMode);
@@ -242,8 +246,5 @@ void heroAction (enum cells map[][20], struct hero *hero, string log[],
         moveBattleCursor(battleAction);
     else if (userAction == '\n' && *inventoryMode == 1)
         useItem(hero, itemList, itemListSize, inventoryCursorPosition, log, inventoryMode);
-
-    // if (*battleMode == 0)
-    //     enemyCheck(enemies, enemiesSize, hero, battleMode, battler, log);
 }
 

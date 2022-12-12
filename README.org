@@ -60,12 +60,8 @@
 | Poison | Decrese 20 HP |
 
 ** Enemeies
-*** Map [2/2]
-- [X] Enemy show on map
-- [X] Enemy can move on the map
-*** Enemey behaviour [0/2]
-- [ ] Enemy follow for player, considering walls
-- [ ] Enemy attack player
+    Fight with enemy is a random event. On each level chanses to meet enemy is different.
+    Enemies on each level is a list selected from general list.
   
 ** Levels
 *** Levels todo [4/8]

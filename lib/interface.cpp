@@ -28,38 +28,23 @@ void drawMap (enum cells map[][20], int mapSize, struct hero *hero,
     int startCoordsY = ((hero -> y - 5) < 0) ? 0 : ((hero -> y + 5) >= mapSize) ? mapSize - 11 : hero -> y - 5;
     int startCoordsX = ((hero -> x - 5) < 0) ? 0 : ((hero -> x + 5) >= mapSize) ? mapSize - 11 : hero -> x - 5;
 
-    // for (int i = 0; i < enemiesSize; i++) {
-    //     map[enemies[i].y][enemies[i].x] = 'E';
-    // }
-
     for (int i = 0; i < 11; i++) {
         for (int j = 0; j < 11; j++) {
             cells currentCell = map[startCoordsY + i][startCoordsX + j];
 
             switch (currentCell) {
-                case Wall: cout << yellowColor << "# "; break;
-                case Floor: cout << ". "; break;
-                case Player: cout << cyanColor << "@ "; break;
-                case Trap: cout << redColor << ". "; break;
+                case Wall: cout << yellowColor << "#"; break;
+                case Floor: cout << "."; break;
+                case Player: cout << cyanColor << "@"; break;
+                case Trap: cout << redColor << "."; break;
 
                 // items
                 case Potion:
-                case Poison: cout << greenColor << ". "; break;
+                case Poison: cout << greenColor << "."; break;
             }
 
+            cout << " ";
             cout << defaultColor;
-
-            // else if (currentCell == 'I')
-            //     cout << greenColor << ". ";
-            // else if (currentCell == '^')
-            //     cout << greenColor;
-            // else if (currentCell == 'E') {
-            //     for (int e = 0; e < 2; e++) {
-            //         if (enemies[e].x == (startCoordsX + j) && enemies[e].y == (startCoordsY + i))
-            //             cout << redColor << enemies[e].symb << " ";
-            //     }
-            // } else 
-            //     cout << defaultColor;
         }
         
         cout << defaultColor << " |" << '\n';
